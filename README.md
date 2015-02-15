@@ -8,7 +8,17 @@ Kotson enables you to parse and write JSON with Google's Gson using a conciser a
 Install
 -------
 
-TODO
+Maven:
+
+    <dependency>
+    	<groupId>com.github.salomonbrys.kotson</groupId>
+    	<artifactId>kotson</artifactId>
+    	<version>1.0</version>
+    </dependency>
+
+Gradle:
+
+    compile 'com.github.salomonbrys.kotson:kotson:1.0'
 
 
 Creating Json
