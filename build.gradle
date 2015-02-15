@@ -1,0 +1,26 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:0.10.+'
+    }
+}
+
+apply plugin: 'kotlin'
+
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.3.+'
+
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.10.+'
+}
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
