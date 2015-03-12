@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:0.10.+'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:0.10.1316'
     }
 }
 
@@ -15,7 +15,7 @@ apply plugin: 'signing'
 
 group = "com.github.salomonbrys.kotson"
 archivesBaseName = "kotson"
-version = '1.0'
+version = '1.0.1'
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -44,9 +44,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:[2.3,2.4)'
+    compile 'com.google.code.gson:gson:2.3.1'
 
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:[0.10,0.11)'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.10.1316'
 }
 
 uploadArchives {
