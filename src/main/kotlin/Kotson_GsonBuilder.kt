@@ -27,16 +27,16 @@ public fun <T: Any> typeAdapter(fRead: (JsonReader) -> T, fWrite: (JsonWriter, T
     }
 
 public fun <T: Any> jsonSerializer(serializer: (src: T, type: Type, context: JsonSerializationContext) -> JsonElement): JsonSerializer<T>
-        = JsonSerializer { (src, type, context) -> serializer(src, type, context) }
+        = JsonSerializer { src, type, context -> serializer(src, type, context) }
 
 public fun <T: Any> simpleJsonSerializer(serializer: (src: T) -> JsonElement): JsonSerializer<T>
-        = JsonSerializer { (src, type, context) -> serializer(src) }
+        = JsonSerializer { src, type, context -> serializer(src) }
 
 public fun <T: Any> jsonDeserializer(deserializer: (json: JsonElement, type: Type, context: JsonDeserializationContext) -> T?): JsonDeserializer<T>
-        = JsonDeserializer<T> { (json, type, context) -> deserializer(json, type, context) }
+        = JsonDeserializer<T> { json, type, context -> deserializer(json, type, context) }
 
 public fun <T: Any> simpleJsonDeserializer(deserializer: (json: JsonElement) -> T?): JsonDeserializer<T>
-        = JsonDeserializer<T> { (json, type, context) -> deserializer(json) }
+        = JsonDeserializer<T> { json, type, context -> deserializer(json) }
 
 public fun <T: Any> instanceCreator(creator: (type: Type) -> T): InstanceCreator<T>
         = InstanceCreator { creator(it) }
