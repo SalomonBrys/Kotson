@@ -2,7 +2,9 @@
 Kotson : *Gson* for *Kotlin*
 ============================
 
-Kotson enables you to parse and write JSON with Google's Gson using a conciser and easier syntax
+Kotson enables you to parse and write JSON with [Google's Gson](https://github.com/google-gson/google-gson) using a conciser and easier syntax.
+
+Kotson is a set of *extension functions*, meaning that it adds utility functions and syntactic sugars to Gson in Kotlin. It does not add new features to Gson nor does it creates new types. It is therefore usable on any Gson object, whether created from java or kotlin in source or library.
 
 
 Install
