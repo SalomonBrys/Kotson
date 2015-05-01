@@ -15,12 +15,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.0</version>
+    	<version>1.1.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.0'
+    compile 'com.github.salomonbrys.kotson:kotson:1.1.0'
 
 
 Creating Json
