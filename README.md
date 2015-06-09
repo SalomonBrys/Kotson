@@ -104,7 +104,7 @@ val list = gson.fromJson<List<User>>(jsonReader)
 val list = gson.fromJson<List<User>>(reader)
 ```
 
-A lot of Gson's APIs are relating on `java.lang.reflect.Type` to specify a type, but Kotlin's `javaClass` returns a `java.lang.Class` which is a Type but suffers from type erasure. To mediate this issue, Gson uses `TypeToken` to create `java.lang.reflect.Type` objects without type erasure.
+A lot of Gson's APIs are relying on `java.lang.reflect.Type` to specify a type, but Kotlin's `javaClass` returns a `java.lang.Class` which is a Type but suffers from type erasure. To mediate this issue, Gson uses `TypeToken` to create `java.lang.reflect.Type` objects without type erasure.
 If you need such a Type object, you can simply use the `typeToken` function the same way you use the `javaClass` function. For example: `typeToken<Map<String, List<User>>>()`
 
 
@@ -140,7 +140,8 @@ val greenComp = components[1]
 // java: int greenComp = json .getAsJsonObject()
 //                            .getAsJsonObject("colors")
 //                            .getAsJsonArray("orange")
-//                            .get(1).getAsInt();
+//                            .get(1)
+//                            .getAsInt();
 
-val greenComp = colors["orange"][1].int
+val greenComp = json["colors"]["orange"][1].int
 ```
