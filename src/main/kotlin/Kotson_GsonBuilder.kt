@@ -16,7 +16,7 @@ import com.google.gson.reflect.TypeToken
 
 
 public inline fun <reified T: Any> typeToken(): Type
-        = object : TypeToken<T>() {} .getType()
+        = object : TypeToken<T>() {} .type
 
 
 
@@ -47,7 +47,7 @@ public inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(typeAdapter: 
         = this.registerTypeAdapter(typeToken<T>(), typeAdapter)
 
 public inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(typeAdapter: Any): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), typeAdapter)
+        = this.registerTypeHierarchyAdapter(T::class.java, typeAdapter)
 
 
 
@@ -55,7 +55,7 @@ public inline fun <reified T: Any> GsonBuilder.adapt(noinline fRead: (JsonReader
         = this.registerTypeAdapter(typeToken<T>(), typeAdapter(fRead, fWrite))
 
 public inline fun <reified T: Any> GsonBuilder.adaptHierarchy(noinline fRead: (JsonReader) -> T, noinline fWrite: (JsonWriter, T) -> Unit): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), typeAdapter(fRead, fWrite))
+        = this.registerTypeHierarchyAdapter(T::class.java, typeAdapter(fRead, fWrite))
 
 
 
@@ -63,13 +63,13 @@ public inline fun <reified T: Any> GsonBuilder.serialize(noinline serializer: (s
         = this.registerTypeAdapter(typeToken<T>(), jsonSerializer(serializer))
 
 public inline fun <reified T: Any> GsonBuilder.serializeHierarchy(noinline serializer: (src: T, type: Type, context: JsonSerializationContext) -> JsonElement): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), jsonSerializer(serializer))
+        = this.registerTypeHierarchyAdapter(T::class.java, jsonSerializer(serializer))
 
 public inline fun <reified T: Any> GsonBuilder.simpleSerialize(noinline serializer: (src: T) -> JsonElement): GsonBuilder
         = this.registerTypeAdapter(typeToken<T>(), simpleJsonSerializer(serializer))
 
 public inline fun <reified T: Any> GsonBuilder.simpleSerializeHierarchy(noinline serializer: (src: T) -> JsonElement): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), simpleJsonSerializer(serializer))
+        = this.registerTypeHierarchyAdapter(T::class.java, simpleJsonSerializer(serializer))
 
 
 
@@ -77,13 +77,13 @@ public inline fun <reified T: Any> GsonBuilder.deserialize(noinline deserializer
         = this.registerTypeAdapter(typeToken<T>(), jsonDeserializer(deserializer))
 
 public inline fun <reified T: Any> GsonBuilder.deserializeHierarchy(noinline deserializer: (json: JsonElement, type: Type, context: JsonDeserializationContext) -> T?): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), jsonDeserializer(deserializer))
+        = this.registerTypeHierarchyAdapter(T::class.java, jsonDeserializer(deserializer))
 
 public inline fun <reified T: Any> GsonBuilder.simpleDeserialize(noinline deserializer: (json: JsonElement) -> T?): GsonBuilder
         = this.registerTypeAdapter(typeToken<T>(), simpleJsonDeserializer(deserializer))
 
 public inline fun <reified T: Any> GsonBuilder.simpleDeserializeHierarchy(noinline deserializer: (json: JsonElement) -> T?): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), simpleJsonDeserializer(deserializer))
+        = this.registerTypeHierarchyAdapter(T::class.java, simpleJsonDeserializer(deserializer))
 
 
 
@@ -91,4 +91,4 @@ public inline fun <reified T: Any> GsonBuilder.createInstances(noinline creator:
         = this.registerTypeAdapter(typeToken<T>(), instanceCreator(creator))
 
 public inline fun <reified T: Any> GsonBuilder.createHierarchyInstances(noinline creator: (type: Type) -> T): GsonBuilder
-        = this.registerTypeHierarchyAdapter(javaClass<T>(), instanceCreator(creator))
+        = this.registerTypeHierarchyAdapter(T::class.java, instanceCreator(creator))
