@@ -1,10 +1,6 @@
 package com.github.salomonbrys.kotson
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonNull
+import com.google.gson.*
 
 public fun Number.toJson(): JsonPrimitive = JsonPrimitive(this)
 
@@ -19,10 +15,10 @@ private fun Any?.toJsonElement(): JsonElement {
         return JsonNull.INSTANCE
 
     return when (this) {
-        is Number -> this.toJson()
-        is Char -> this.toJson()
-        is Boolean -> this.toJson()
-        is String -> this.toJson()
+        is Number -> toJson()
+        is Char -> toJson()
+        is Boolean -> toJson()
+        is String -> toJson()
         is JsonElement -> this
         else -> throw IllegalArgumentException("${this} cannot be converted to JSON")
     }

@@ -1,11 +1,8 @@
 package com.github.salomonbrys.kotson
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.InstanceCreator
+import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonArray
 import java.math.BigDecimal
 import java.math.BigInteger
 

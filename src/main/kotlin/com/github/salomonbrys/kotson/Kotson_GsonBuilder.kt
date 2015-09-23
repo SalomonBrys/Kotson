@@ -1,18 +1,10 @@
 package com.github.salomonbrys.kotson
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSerializer
-import com.google.gson.JsonElement
-import java.lang.reflect.Type
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.InstanceCreator
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.google.gson.TypeAdapter
-import com.google.gson.reflect.TypeToken
-
+import java.lang.reflect.Type
 
 
 public inline fun <reified T: Any> typeToken(): Type
