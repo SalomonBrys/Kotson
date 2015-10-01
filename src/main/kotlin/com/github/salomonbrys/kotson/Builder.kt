@@ -10,7 +10,7 @@ public fun Boolean.toJson() : JsonPrimitive = JsonPrimitive(this)
 
 public fun String.toJson() : JsonPrimitive = JsonPrimitive(this)
 
-private fun Any?.toJsonElement(): JsonElement {
+internal fun Any?.toJsonElement(): JsonElement {
     if (this == null)
         return JsonNull.INSTANCE
 
@@ -38,3 +38,19 @@ public fun jsonObject(vararg values: Pair<String, Any?>): JsonObject {
     }
     return obj;
 }
+
+public fun JsonObject.shallowCopy(): JsonObject = JsonObject().apply { this@shallowCopy.entrySet().forEach { put(it) } }
+public fun JsonArray.shallowCopy(): JsonArray = JsonArray().apply { addAll(this@shallowCopy) }
+
+private fun JsonElement._deepCopy(): JsonElement {
+    return when (this) {
+        is JsonNull, is JsonPrimitive -> this
+        is JsonObject -> deepCopy()
+        is JsonArray -> deepCopy()
+        else -> throw IllegalArgumentException("Unknown JsonElement: ${this}")
+    }
+}
+
+public fun JsonObject.deepCopy(): JsonObject = JsonObject().apply { this@deepCopy.entrySet().forEach { add(it.getKey(), it.getValue()._deepCopy()) } }
+
+public fun JsonArray.deepCopy(): JsonArray = JsonArray().apply { this@deepCopy.forEach { add(it._deepCopy()) } }

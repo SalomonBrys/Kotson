@@ -51,8 +51,11 @@ public val JsonElement?.nullArray : JsonArray? get() = _nullOr { array }
 public val JsonElement.obj : JsonObject get() = asJsonObject
 public val JsonElement?.nullObj : JsonObject? get() = _nullOr { obj }
 
-public fun JsonElement.get(key: String): JsonElement = obj.get(key)
-public fun JsonElement.get(index: Int): JsonElement = array.get(index)
+operator public fun JsonElement.get(key: String): JsonElement = obj.get(key)
+operator public fun JsonElement.get(index: Int): JsonElement = array.get(index)
 
-public fun JsonElement.contains(key: String): Boolean = obj.has(key)
+operator public fun JsonObject.contains(key: String): Boolean = has(key)
 
+operator public fun JsonArray.contains(value: Any): Boolean = contains(value.toJsonElement())
+
+public fun JsonObject.toMap(): Map<String, JsonElement> = entrySet().toMap({ it.getKey() }, { it.getValue() })

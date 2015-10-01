@@ -1,6 +1,6 @@
 
-Kotson : *Gson* for *Kotlin*
-============================
+Kotson: *Gson* for *Kotlin*
+===========================
 
 Kotson enables you to parse and write JSON with [Google's Gson](https://github.com/google-gson/google-gson) using a conciser and easier syntax.
 
@@ -15,16 +15,17 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.3.1</version>
+    	<version>1.4.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.3.1'
+    compile 'com.github.salomonbrys.kotson:kotson:1.4.0'
 
  - version 1.1.0 is compatible with Kotlin M11
  - version 1.2.0 is compatible with Kotlin M12
  - version 1.3.1 is compatible with Kotlin M13
+ - version 1.4.0 is compatible with Kotlin M14
 
 
 Creating Json
@@ -145,4 +146,33 @@ val greenComp = components[1]
 //                            .getAsInt();
 
 val greenComp = json["colors"]["orange"][1].int
+```
+
+
+Mutating Json Elements
+----------------------
+
+Kotson allows you to mutate a `JsonObject` or a `JsonArray`:
+
+```kotlin
+val array = jsonArray("zero", "x", "two")
+array[1] = "one"
+array += "three"
+array -= "zero"
+
+val obj = jsonObject()
+obj["this"] = "that"
+obj += "answer" to 42
+obj -= "this"
+```
+
+
+Copying Json Elements
+---------------------
+
+Kotson allows you to make a shallow copy (single-level copy) or a deep copy (recursive copy) of a `JsonObject` or a `JsonArray`:
+
+```kotlin
+val shallow = json.shallowCopy()
+val deep = json.deepCopy()
 ```
