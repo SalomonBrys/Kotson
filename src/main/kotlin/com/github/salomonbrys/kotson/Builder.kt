@@ -12,7 +12,7 @@ public fun String.toJson() : JsonPrimitive = JsonPrimitive(this)
 
 internal fun Any?.toJsonElement(): JsonElement {
     if (this == null)
-        return JsonNull.INSTANCE
+        return jsonNull
 
     return when (this) {
         is Number -> toJson()

@@ -1,4 +1,12 @@
 
+[![Kotlin M14](https://img.shields.io/badge/Kotlin-M14-blue.svg)](http://kotlinlang.org)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
+[![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
+[![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
+[![GitHub issues](https://img.shields.io/github/issues/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/issues)
+[![Slack channel](https://img.shields.io/badge/Chat-Slack-green.svg)](https://kotlinlang.slack.com/messages/kotson/)
+
+
 Kotson: *Gson* for *Kotlin*
 ===========================
 
@@ -15,17 +23,17 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.4.0</version>
+    	<version>1.4.1</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.4.0'
+    compile 'com.github.salomonbrys.kotson:kotson:1.4.1'
 
  - version 1.1.0 is compatible with Kotlin M11
  - version 1.2.0 is compatible with Kotlin M12
  - version 1.3.1 is compatible with Kotlin M13
- - version 1.4.0 is compatible with Kotlin M14
+ - version 1.4.1 is compatible with Kotlin M14
 
 
 Creating Json
