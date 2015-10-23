@@ -12,11 +12,11 @@ operator public fun JsonElement.set(key: Int, value: Any?) = array.set(key, valu
 
 
 public fun JsonObject.put(pair: Pair<String, Any?>) = add(pair.first, pair.second.toJsonElement())
-public fun JsonObject.put(entry: Map.Entry<String, Any?>) = add(entry.getKey(), entry.getValue().toJsonElement())
+public fun JsonObject.put(entry: Map.Entry<String, Any?>) = add(entry.key, entry.value.toJsonElement())
 
 public fun JsonObject.putAll(vararg pairs: Pair<String, Any?>) = pairs.forEach { put(it) }
 public fun JsonObject.putAll(vararg entries: Map.Entry<String, Any?>) = entries.forEach { put(it) }
-public fun JsonObject.putAll(map: Map<String, Any?>) = map.entrySet().forEach { put(it) }
+public fun JsonObject.putAll(map: Map<String, Any?>) = map.entries.forEach { put(it) }
 public fun JsonObject.putAll(obj: JsonObject) = obj.entrySet().forEach { put(it) }
 public fun JsonObject.putAll(pairs: Sequence<Pair<String, Any?>>) = pairs.forEach { put(it) }
 public fun JsonObject.putAll(pairs: Iterable<Pair<String, Any?>>) = pairs.forEach { put(it) }

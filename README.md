@@ -23,17 +23,18 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.4.1</version>
+    	<version>1.5.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.4.1'
+    compile 'com.github.salomonbrys.kotson:kotson:1.5.0'
 
  - version 1.1.0 is compatible with Kotlin M11
  - version 1.2.0 is compatible with Kotlin M12
  - version 1.3.1 is compatible with Kotlin M13
  - version 1.4.1 is compatible with Kotlin M14
+ - version 1.5.0 is compatible with Kotlin 1.0.0-beta
 
 
 Creating Json
