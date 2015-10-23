@@ -51,6 +51,6 @@ private fun JsonElement._deepCopy(): JsonElement {
     }
 }
 
-public fun JsonObject.deepCopy(): JsonObject = JsonObject().apply { this@deepCopy.entrySet().forEach { add(it.getKey(), it.getValue()._deepCopy()) } }
+public fun JsonObject.deepCopy(): JsonObject = JsonObject().apply { this@deepCopy.entrySet().forEach { add(it.key, it.value._deepCopy()) } }
 
 public fun JsonArray.deepCopy(): JsonArray = JsonArray().apply { this@deepCopy.forEach { add(it._deepCopy()) } }

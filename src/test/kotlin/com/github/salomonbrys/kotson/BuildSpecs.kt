@@ -36,15 +36,15 @@ public class BuildSpecs : Spek({
 
         on("queried for an inexisting key") {
 
-            it("should throw a NoSuchElementException when queried with get") {
+            it("should throw a NoSuchElementException when queried with getNotNull") {
 
-                shouldThrow<NoSuchElementException> { obj["nothing"] }
+                shouldThrow<NoSuchElementException> { obj.getNotNull("nothing") }
 
             }
 
-            it("should return null when queried with getOrNull") {
+            it("should return null when queried with get") {
 
-                shouldBeNull(obj.getOrNull("nothing"))
+                shouldBeNull(obj["nothing"])
 
             }
 

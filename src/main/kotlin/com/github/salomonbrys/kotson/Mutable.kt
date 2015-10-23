@@ -12,11 +12,11 @@ operator public fun JsonElement.set(key: Int, value: Any?) = array.set(key, valu
 
 
 public fun JsonObject.put(pair: Pair<String, Any?>) = add(pair.first, pair.second.toJsonElement())
-public fun JsonObject.put(entry: Map.Entry<String, Any?>) = add(entry.getKey(), entry.getValue().toJsonElement())
+public fun JsonObject.put(entry: Map.Entry<String, Any?>) = add(entry.key, entry.value.toJsonElement())
 
 public fun JsonObject.putAll(vararg pairs: Pair<String, Any?>) = pairs.forEach { put(it) }
 public fun JsonObject.putAll(vararg entries: Map.Entry<String, Any?>) = entries.forEach { put(it) }
-public fun JsonObject.putAll(map: Map<String, Any?>) = map.entrySet().forEach { put(it) }
+public fun JsonObject.putAll(map: Map<String, Any?>) = map.entries.forEach { put(it) }
 public fun JsonObject.putAll(obj: JsonObject) = obj.entrySet().forEach { put(it) }
 public fun JsonObject.putAll(pairs: Sequence<Pair<String, Any?>>) = pairs.forEach { put(it) }
 public fun JsonObject.putAll(pairs: Iterable<Pair<String, Any?>>) = pairs.forEach { put(it) }
@@ -49,7 +49,7 @@ operator public fun JsonObject.minus(keys: Array<String>) = shallowCopy().apply 
 operator public fun JsonObject.minus(keys: Iterable<String>) = shallowCopy().apply { removeAll(keys) }
 operator public fun JsonObject.minus(keys: Sequence<String>) = shallowCopy().apply { removeAll(keys) }
 
-operator public fun JsonObject.minusAssign(key: String) = remove(key)
+operator public fun JsonObject.minusAssign(key: String) { remove(key) }
 operator public fun JsonObject.minusAssign(keys: Array<String>) = removeAll(*keys)
 operator public fun JsonObject.minusAssign(keys: Iterable<String>) = removeAll(keys)
 operator public fun JsonObject.minusAssign(keys: Sequence<String>) = removeAll(keys)
@@ -63,12 +63,12 @@ public fun JsonArray.addAll(values: Iterable<Any?>) = values.forEach { add(it) }
 public fun JsonArray.addAll(values: Sequence<Any?>) = values.forEach { add(it) }
 
 operator public fun JsonArray.plus(value: Any?) = shallowCopy().apply { add(value) }
-operator public fun JsonArray.plus(vararg values: Any?) = shallowCopy().apply { addAll(values) }
+operator public fun JsonArray.plus(values: Array<Any?>) = shallowCopy().apply { addAll(values) }
 operator public fun JsonArray.plus(values: Iterable<Any?>) = shallowCopy().apply { addAll(values) }
 operator public fun JsonArray.plus(values: Sequence<Any?>) = shallowCopy().apply { addAll(values) }
 
 operator public fun JsonArray.plusAssign(value: Any?) = add(value)
-operator public fun JsonArray.plusAssign(vararg values: Any?) = addAll(values)
+operator public fun JsonArray.plusAssign(values: Array<Any?>) = addAll(values)
 operator public fun JsonArray.plusAssign(values: Iterable<Any?>) = addAll(values)
 operator public fun JsonArray.plusAssign(values: Sequence<Any?>) = addAll(values)
 
@@ -77,12 +77,12 @@ public fun JsonArray.removeAll(values: Iterable<JsonElement>) = values.forEach {
 public fun JsonArray.removeAll(values: Sequence<JsonElement>) = values.forEach { remove(it) }
 
 operator public fun JsonArray.minus(value: JsonElement) = shallowCopy().apply { remove(value) }
-operator public fun JsonArray.minus(vararg values: JsonElement) = shallowCopy().apply { removeAll(*values) }
+operator public fun JsonArray.minus(values: Array<JsonElement>) = shallowCopy().apply { removeAll(*values) }
 operator public fun JsonArray.minus(values: Iterable<JsonElement>) = shallowCopy().apply { removeAll(values) }
 operator public fun JsonArray.minus(values: Sequence<JsonElement>) = shallowCopy().apply { removeAll(values) }
 
-operator public fun JsonArray.minusAssign(value: JsonElement) = remove(value)
-operator public fun JsonArray.minusAssign(vararg values: JsonElement) = removeAll(*values)
+operator public fun JsonArray.minusAssign(value: JsonElement) { remove(value) }
+operator public fun JsonArray.minusAssign(values: Array<JsonElement>) = removeAll(*values)
 operator public fun JsonArray.minusAssign(values: Iterable<JsonElement>) = removeAll(values)
 operator public fun JsonArray.minusAssign(values: Sequence<JsonElement>) = removeAll(values)
 

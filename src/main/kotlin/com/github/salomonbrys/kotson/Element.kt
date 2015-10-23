@@ -56,17 +56,17 @@ public val JsonElement?.nullObj: JsonObject? get() = _nullOr { obj }
 public val jsonNull: JsonNull = JsonNull.INSTANCE
 
 operator public fun JsonElement.get(key: String): JsonElement = obj.get(key) ?: throw NoSuchElementException()
-operator public fun JsonElement.get(index: Int): JsonElement = array.get(index) ?: throw NoSuchElementException()
+operator public fun JsonElement.get(index: Int): JsonElement = array.get(index)
 
-public fun JsonElement.getOrNull(key: String): JsonElement? = obj.get(key)
+public fun JsonObject.getNotNull(key: String): JsonElement = get(key) ?: throw NoSuchElementException()
 
 operator public fun JsonObject.contains(key: String): Boolean = has(key)
-public fun JsonObject.size(): Int = entrySet().size()
+public fun JsonObject.size(): Int = entrySet().size
 public fun JsonObject.isEmpty(): Boolean = entrySet().isEmpty()
 public fun JsonObject.isNotEmpty(): Boolean = entrySet().isNotEmpty()
-public fun JsonObject.keys(): Collection<String> = entrySet().map { it.getKey() }
-public fun JsonObject.forEach(operation: (String, JsonElement) -> Unit): Unit = entrySet().forEach { operation(it.getKey(), it.getValue()) }
+public fun JsonObject.keys(): Collection<String> = entrySet().map { it.key }
+public fun JsonObject.forEach(operation: (String, JsonElement) -> Unit): Unit = entrySet().forEach { operation(it.key, it.value) }
 
 operator public fun JsonArray.contains(value: Any): Boolean = contains(value.toJsonElement())
 
-public fun JsonObject.toMap(): Map<String, JsonElement> = entrySet().toMap({ it.getKey() }, { it.getValue() })
+public fun JsonObject.toMap(): Map<String, JsonElement> = entrySet().toMap({ it.key }, { it.value })

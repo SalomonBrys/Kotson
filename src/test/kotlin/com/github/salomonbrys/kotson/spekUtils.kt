@@ -9,6 +9,6 @@ public abstract class Spek(init: Spek.() -> Unit) : org.jetbrains.spek.api.Spek(
     }
 }
 
-public inline fun It.shouldThrow<reified T: Throwable>(noinline block: () -> Any): T {
+public inline fun <reified T: Throwable> It.shouldThrow(noinline block: () -> Unit): T {
     return shouldThrow(T::class.java, block)
 }

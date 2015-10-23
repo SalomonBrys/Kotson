@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '0.14.451'
+    ext.kotlin_version = '1.0.0-beta-1038'
 
     repositories {
         mavenCentral()
@@ -15,7 +15,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "com.github.salomonbrys.kotson"
-version = '1.4.1'
+version = '1.5.0'
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -54,7 +54,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testCompile 'org.jetbrains.spek:spek:0.1.178'
+    testCompile 'org.jetbrains.spek:spek:0.1.180'
 }
 
 if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
