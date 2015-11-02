@@ -14,30 +14,71 @@ public operator fun JsonObject.getValue(thisRef: Any?, property: KProperty<*>): 
 public operator fun JsonObject.setValue(thisRef: Any?, property: KProperty<*>, value: JsonElement) { obj[property.name] = value }
 
 
-public class JsonDelegate<T>(public val obj: JsonObject, private val _get: (JsonElement) -> T, private val _set: (T) -> JsonElement) : ReadWriteProperty<Any?, T> {
+public class JsonObjectDelegate<T>(private val _obj: JsonObject, private val _key: String?, private val _get: (JsonElement) -> T, private val _set: (T) -> JsonElement) : ReadWriteProperty<Any?, T> {
 
     override operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-        return _get(obj[property.name])
+        return _get(_obj[_key ?: property.name])
     }
 
     override operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-        obj[property.name] = _set(value)
+        _obj[_key ?: property.name] = _set(value)
     }
 
 }
 
-public val JsonObject.byString: JsonDelegate<String>         get() = JsonDelegate(this, { it.string }, { it.toJson() } )
-public val JsonObject.byBool: JsonDelegate<Boolean>          get() = JsonDelegate(this, { it.bool }, { it.toJson() } )
-public val JsonObject.byByte: JsonDelegate<Byte>             get() = JsonDelegate(this, { it.byte }, { it.toJson() } )
-public val JsonObject.byChar: JsonDelegate<Char>             get() = JsonDelegate(this, { it.char }, { it.toJson() } )
-public val JsonObject.byShort: JsonDelegate<Short>           get() = JsonDelegate(this, { it.short }, { it.toJson() } )
-public val JsonObject.byInt: JsonDelegate<Int>               get() = JsonDelegate(this, { it.int }, { it.toJson() } )
-public val JsonObject.byLong: JsonDelegate<Long>             get() = JsonDelegate(this, { it.long }, { it.toJson() } )
-public val JsonObject.byFloat: JsonDelegate<Float>           get() = JsonDelegate(this, { it.float }, { it.toJson() } )
-public val JsonObject.byDouble: JsonDelegate<Double>         get() = JsonDelegate(this, { it.double }, { it.toJson() } )
-public val JsonObject.byNumber: JsonDelegate<Number>         get() = JsonDelegate(this, { it.number }, { it.toJson() } )
-public val JsonObject.byBigInteger: JsonDelegate<BigInteger> get() = JsonDelegate(this, { it.bigInteger }, { it.toJson() } )
-public val JsonObject.byBigDecimal: JsonDelegate<BigDecimal> get() = JsonDelegate(this, { it.bigDecimal }, { it.toJson() } )
-public val JsonObject.byArray: JsonDelegate<JsonArray>       get() = JsonDelegate(this, { it.array }, { it } )
-public val JsonObject.byObject: JsonDelegate<JsonObject>     get() = JsonDelegate(this, { it.obj }, { it } )
+public class JsonArrayDelegate<T>(private val _array: JsonArray, private val _index: Int, private val _get: (JsonElement) -> T, private val _set: (T) -> JsonElement) : ReadWriteProperty<Any?, T> {
 
+    override operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        return _get(_array[_index])
+    }
+
+    override operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+        _array[_index] = _set(value)
+    }
+
+}
+
+public val JsonElement.byString     : JsonObjectDelegate<String>     get() = JsonObjectDelegate(this.obj, null,    { it.string },     { it.toJson() } )
+public val JsonElement.byBool       : JsonObjectDelegate<Boolean>    get() = JsonObjectDelegate(this.obj, null,    { it.bool },       { it.toJson() } )
+public val JsonElement.byByte       : JsonObjectDelegate<Byte>       get() = JsonObjectDelegate(this.obj, null,    { it.byte },       { it.toJson() } )
+public val JsonElement.byChar       : JsonObjectDelegate<Char>       get() = JsonObjectDelegate(this.obj, null,    { it.char },       { it.toJson() } )
+public val JsonElement.byShort      : JsonObjectDelegate<Short>      get() = JsonObjectDelegate(this.obj, null,    { it.short },      { it.toJson() } )
+public val JsonElement.byInt        : JsonObjectDelegate<Int>        get() = JsonObjectDelegate(this.obj, null,    { it.int },        { it.toJson() } )
+public val JsonElement.byLong       : JsonObjectDelegate<Long>       get() = JsonObjectDelegate(this.obj, null,    { it.long },       { it.toJson() } )
+public val JsonElement.byFloat      : JsonObjectDelegate<Float>      get() = JsonObjectDelegate(this.obj, null,    { it.float },      { it.toJson() } )
+public val JsonElement.byDouble     : JsonObjectDelegate<Double>     get() = JsonObjectDelegate(this.obj, null,    { it.double },     { it.toJson() } )
+public val JsonElement.byNumber     : JsonObjectDelegate<Number>     get() = JsonObjectDelegate(this.obj, null,    { it.number },     { it.toJson() } )
+public val JsonElement.byBigInteger : JsonObjectDelegate<BigInteger> get() = JsonObjectDelegate(this.obj, null,    { it.bigInteger }, { it.toJson() } )
+public val JsonElement.byBigDecimal : JsonObjectDelegate<BigDecimal> get() = JsonObjectDelegate(this.obj, null,    { it.bigDecimal }, { it.toJson() } )
+public val JsonElement.byArray      : JsonObjectDelegate<JsonArray>  get() = JsonObjectDelegate(this.obj, null,    { it.array },      { it } )
+public val JsonElement.byObject     : JsonObjectDelegate<JsonObject> get() = JsonObjectDelegate(this.obj, null,    { it.obj },        { it } )
+
+public fun JsonElement.byString(key: String)     = JsonObjectDelegate(this.obj, key,    { it.string },     { it.toJson() } )
+public fun JsonElement.byBool(key: String)       = JsonObjectDelegate(this.obj, key,    { it.bool },       { it.toJson() } )
+public fun JsonElement.byByte(key: String)       = JsonObjectDelegate(this.obj, key,    { it.byte },       { it.toJson() } )
+public fun JsonElement.byChar(key: String)       = JsonObjectDelegate(this.obj, key,    { it.char },       { it.toJson() } )
+public fun JsonElement.byShort(key: String)      = JsonObjectDelegate(this.obj, key,    { it.short },      { it.toJson() } )
+public fun JsonElement.byInt(key: String)        = JsonObjectDelegate(this.obj, key,    { it.int },        { it.toJson() } )
+public fun JsonElement.byLong(key: String)       = JsonObjectDelegate(this.obj, key,    { it.long },       { it.toJson() } )
+public fun JsonElement.byFloat(key: String)      = JsonObjectDelegate(this.obj, key,    { it.float },      { it.toJson() } )
+public fun JsonElement.byDouble(key: String)     = JsonObjectDelegate(this.obj, key,    { it.double },     { it.toJson() } )
+public fun JsonElement.byNumber(key: String)     = JsonObjectDelegate(this.obj, key,    { it.number },     { it.toJson() } )
+public fun JsonElement.byBigInteger(key: String) = JsonObjectDelegate(this.obj, key,    { it.bigInteger }, { it.toJson() } )
+public fun JsonElement.byBigDecimal(key: String) = JsonObjectDelegate(this.obj, key,    { it.bigDecimal }, { it.toJson() } )
+public fun JsonElement.byArray(key: String)      = JsonObjectDelegate(this.obj, key,    { it.array },      { it } )
+public fun JsonElement.byObject(key: String)     = JsonObjectDelegate(this.obj, key,    { it.obj },        { it } )
+
+public fun JsonElement.byString(index: Int)     = JsonArrayDelegate(this.array, index, { it.string },     { it.toJson() } )
+public fun JsonElement.byBool(index: Int)       = JsonArrayDelegate(this.array, index, { it.bool },       { it.toJson() } )
+public fun JsonElement.byByte(index: Int)       = JsonArrayDelegate(this.array, index, { it.byte },       { it.toJson() } )
+public fun JsonElement.byChar(index: Int)       = JsonArrayDelegate(this.array, index, { it.char },       { it.toJson() } )
+public fun JsonElement.byShort(index: Int)      = JsonArrayDelegate(this.array, index, { it.short },      { it.toJson() } )
+public fun JsonElement.byInt(index: Int)        = JsonArrayDelegate(this.array, index, { it.int },        { it.toJson() } )
+public fun JsonElement.byLong(index: Int)       = JsonArrayDelegate(this.array, index, { it.long },       { it.toJson() } )
+public fun JsonElement.byFloat(index: Int)      = JsonArrayDelegate(this.array, index, { it.float },      { it.toJson() } )
+public fun JsonElement.byDouble(index: Int)     = JsonArrayDelegate(this.array, index, { it.double },     { it.toJson() } )
+public fun JsonElement.byNumber(index: Int)     = JsonArrayDelegate(this.array, index, { it.number },     { it.toJson() } )
+public fun JsonElement.byBigInteger(index: Int) = JsonArrayDelegate(this.array, index, { it.bigInteger }, { it.toJson() } )
+public fun JsonElement.byBigDecimal(index: Int) = JsonArrayDelegate(this.array, index, { it.bigDecimal }, { it.toJson() } )
+public fun JsonElement.byArray(index: Int)      = JsonArrayDelegate(this.array, index, { it.array },      { it } )
+public fun JsonElement.byObject(index: Int)     = JsonArrayDelegate(this.array, index, { it.obj },        { it } )

@@ -23,18 +23,19 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.5.1</version>
+    	<version>1.6.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.5.1'
+    compile 'com.github.salomonbrys.kotson:kotson:1.6.0'
 
  - version 1.1.0 is compatible with Kotlin M11
  - version 1.2.0 is compatible with Kotlin M12
  - version 1.3.1 is compatible with Kotlin M13
  - version 1.4.1 is compatible with Kotlin M14
- - version 1.5.1 is compatible with Kotlin 1.0.0-beta-1038
+ - version 1.5.0 is compatible with Kotlin 1.0.0-beta-1038
+ - version 1.6.0 is compatible with Kotlin 1.0.0-beta-1103
 
 
 Creating Json
@@ -194,7 +195,8 @@ Kotson allows you to delegate properties to `JsonObject` fields:
 
 ```kotlin
 class Person(public val obj: JsonObject) {
-    val name: String by obj.byString
-    val age: Int by obj.byInt
+    val id: String by obj.byString               // Maps to obj["id"]
+    val name: String by obj.byString("fullName") // Maps to obj["fullName"]
+    val birthDate: Int by obj["dates"].byInt(0)  // Maps to obj["dates"][0]
 }
 ```
