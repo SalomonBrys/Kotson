@@ -11,16 +11,16 @@ import java.io.Reader
 public inline fun <reified T: Any> Gson.getAdapter(): TypeAdapter<T>
         = this.getAdapter(object: TypeToken<T>() {})
 
-public inline fun <reified T: Any> Gson.fromJson(json: String): T?
+public inline fun <reified T: Any> Gson.fromJson(json: String): T
         = this.fromJson(json, typeToken<T>())
 
-public inline fun <reified T: Any> Gson.fromJson(json: Reader): T?
+public inline fun <reified T: Any> Gson.fromJson(json: Reader): T
         = this.fromJson(json, typeToken<T>())
 
-public inline fun <reified T: Any> Gson.fromJson(json: JsonReader): T?
+public inline fun <reified T: Any> Gson.fromJson(json: JsonReader): T
         = this.fromJson(json, typeToken<T>())
 
-public inline fun <reified T: Any> Gson.fromJson(json: JsonElement): T?
+public inline fun <reified T: Any> Gson.fromJson(json: JsonElement): T
         = this.fromJson(json, typeToken<T>())
 
 public inline fun <reified T: Any> Gson.toJson(src: Any): String

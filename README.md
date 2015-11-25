@@ -1,5 +1,5 @@
 
-[![Kotlin 1.0.0-beta-1038](https://img.shields.io/badge/Kotlin-1.0.0--beta--1038-blue.svg)](http://kotlinlang.org)
+[![Kotlin 1.0.0-beta-2423](https://img.shields.io/badge/Kotlin-1.0.0--beta--2423-blue.svg)](http://kotlinlang.org)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
 [![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
 [![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
@@ -23,12 +23,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.6.0</version>
+    	<version>1.7.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.6.0'
+    compile 'com.github.salomonbrys.kotson:kotson:1.7.0'
 
  - version 1.1.0 is compatible with Kotlin M11
  - version 1.2.0 is compatible with Kotlin M12
@@ -36,6 +36,7 @@ Gradle:
  - version 1.4.1 is compatible with Kotlin M14
  - version 1.5.0 is compatible with Kotlin 1.0.0-beta-1038
  - version 1.6.0 is compatible with Kotlin 1.0.0-beta-1103
+ - version 1.7.0 is compatible with Kotlin 1.0.0-beta-2423
 
 
 Creating Json
@@ -115,6 +116,8 @@ val list = gson.fromJson<List<User>>(jsonElement)
 val list = gson.fromJson<List<User>>(jsonReader)
 val list = gson.fromJson<List<User>>(reader)
 ```
+
+Attention: `gson.fromJson<MyType>` will return a non-nullable type whereas `gson.fromJson<MyType?>` will return a nullable type. Therefore the code `gson.fromJson<MyType>("null")` is correct and will throw a null-pointer exception!
 
 A lot of Gson's APIs are relying on `java.lang.reflect.Type` to specify a type, but Kotlin's `javaClass` returns a `java.lang.Class` which is a Type but suffers from type erasure. To mediate this issue, Gson uses `TypeToken` to create `java.lang.reflect.Type` objects without type erasure.
 If you need such a Type object, you can simply use the `typeToken` function the same way you use the `javaClass` function. For example: `typeToken<Map<String, List<User>>>()`
