@@ -54,7 +54,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testCompile 'org.jetbrains.spek:spek:0.1.180'
+    testCompile 'org.jetbrains.spek:spek:0.1.182'
 }
 
 if (hasProperty('ossrhUsername') && hasProperty('ossrhPassword')) {
