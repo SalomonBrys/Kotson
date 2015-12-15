@@ -37,7 +37,15 @@ Gradle:
  - version 1.5.0 is compatible with Kotlin 1.0.0-beta-1038
  - version 1.6.0 is compatible with Kotlin 1.0.0-beta-1103
  - version 1.7.0 is compatible with Kotlin 1.0.0-beta-2423
+ - version 2.0.0-beta is compatible with Kotlin 1.0.0-beta-3595
 
+v2 documentation
+================
+
+TODO
+
+v1 documentation
+================
 
 Creating Json
 -------------
