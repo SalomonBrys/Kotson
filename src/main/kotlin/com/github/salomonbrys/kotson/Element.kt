@@ -11,61 +11,61 @@ import java.util.*
 private fun <T : Any> JsonElement?._nullOr(getNotNull: JsonElement.() -> T) : T?
         = if (this == null || isJsonNull) null else getNotNull()
 
-public val JsonElement.string: String get() = asString
-public val JsonElement?.nullString: String? get() = _nullOr { string }
+val JsonElement.string: String get() = asString
+val JsonElement?.nullString: String? get() = _nullOr { string }
 
-public val JsonElement.bool: Boolean get() = asBoolean
-public val JsonElement?.nullBool: Boolean? get() = _nullOr { bool }
+val JsonElement.bool: Boolean get() = asBoolean
+val JsonElement?.nullBool: Boolean? get() = _nullOr { bool }
 
-public val JsonElement.byte: Byte get() = asByte
-public val JsonElement?.nullByte: Byte? get() = _nullOr { byte }
+val JsonElement.byte: Byte get() = asByte
+val JsonElement?.nullByte: Byte? get() = _nullOr { byte }
 
-public val JsonElement.char: Char get() = asCharacter
-public val JsonElement?.nullChar: Char? get() = _nullOr { char }
+val JsonElement.char: Char get() = asCharacter
+val JsonElement?.nullChar: Char? get() = _nullOr { char }
 
-public val JsonElement.short: Short get() = asShort
-public val JsonElement?.nullShort: Short? get() = _nullOr { short }
+val JsonElement.short: Short get() = asShort
+val JsonElement?.nullShort: Short? get() = _nullOr { short }
 
-public val JsonElement.int: Int get() = asInt
-public val JsonElement?.nullInt: Int? get() = _nullOr { int }
+val JsonElement.int: Int get() = asInt
+val JsonElement?.nullInt: Int? get() = _nullOr { int }
 
-public val JsonElement.long: Long get() = asLong
-public val JsonElement?.nullLong: Long? get() = _nullOr { long }
+val JsonElement.long: Long get() = asLong
+val JsonElement?.nullLong: Long? get() = _nullOr { long }
 
-public val JsonElement.float: Float get() = asFloat
-public val JsonElement?.nullFloat: Float? get() = _nullOr { float }
+val JsonElement.float: Float get() = asFloat
+val JsonElement?.nullFloat: Float? get() = _nullOr { float }
 
-public val JsonElement.double: Double get() = asDouble
-public val JsonElement?.nullDouble: Double? get() = _nullOr { double }
+val JsonElement.double: Double get() = asDouble
+val JsonElement?.nullDouble: Double? get() = _nullOr { double }
 
-public val JsonElement.number: Number get() = asNumber
-public val JsonElement?.nullNumber: Number? get() = _nullOr { number }
+val JsonElement.number: Number get() = asNumber
+val JsonElement?.nullNumber: Number? get() = _nullOr { number }
 
-public val JsonElement.bigInteger: BigInteger get() = asBigInteger
-public val JsonElement?.nullBigInteger: BigInteger? get() = _nullOr { bigInteger }
+val JsonElement.bigInteger: BigInteger get() = asBigInteger
+val JsonElement?.nullBigInteger: BigInteger? get() = _nullOr { bigInteger }
 
-public val JsonElement.bigDecimal: BigDecimal get() = asBigDecimal
-public val JsonElement?.nullBigDecimal: BigDecimal? get() = _nullOr { bigDecimal }
+val JsonElement.bigDecimal: BigDecimal get() = asBigDecimal
+val JsonElement?.nullBigDecimal: BigDecimal? get() = _nullOr { bigDecimal }
 
-public val JsonElement.array: JsonArray get() = asJsonArray
-public val JsonElement?.nullArray: JsonArray? get() = _nullOr { array }
+val JsonElement.array: JsonArray get() = asJsonArray
+val JsonElement?.nullArray: JsonArray? get() = _nullOr { array }
 
-public val JsonElement.obj: JsonObject get() = asJsonObject
-public val JsonElement?.nullObj: JsonObject? get() = _nullOr { obj }
+val JsonElement.obj: JsonObject get() = asJsonObject
+val JsonElement?.nullObj: JsonObject? get() = _nullOr { obj }
 
-public val jsonNull: JsonNull = JsonNull.INSTANCE
+val jsonNull: JsonNull = JsonNull.INSTANCE
 
-public operator fun JsonElement.get(key: String): JsonElement = obj.get(key) ?: throw NoSuchElementException()
-public operator fun JsonElement.get(index: Int): JsonElement = array.get(index)
+operator fun JsonElement.get(key: String): JsonElement = obj.get(key) ?: throw NoSuchElementException()
+operator fun JsonElement.get(index: Int): JsonElement = array.get(index)
 
-public fun JsonObject.getNotNull(key: String): JsonElement = get(key) ?: throw NoSuchElementException()
+fun JsonObject.getNotNull(key: String): JsonElement = get(key) ?: throw NoSuchElementException()
 
-public operator fun JsonObject.contains(key: String): Boolean = has(key)
-public fun JsonObject.size(): Int = entrySet().size
-public fun JsonObject.isEmpty(): Boolean = entrySet().isEmpty()
-public fun JsonObject.isNotEmpty(): Boolean = entrySet().isNotEmpty()
-public fun JsonObject.keys(): Collection<String> = entrySet().map { it.key }
-public fun JsonObject.forEach(operation: (String, JsonElement) -> Unit): Unit = entrySet().forEach { operation(it.key, it.value) }
-public fun JsonObject.toMap(): Map<String, JsonElement> = entrySet().toMap({ it.key }, { it.value })
+operator fun JsonObject.contains(key: String): Boolean = has(key)
+fun JsonObject.size(): Int = entrySet().size
+fun JsonObject.isEmpty(): Boolean = entrySet().isEmpty()
+fun JsonObject.isNotEmpty(): Boolean = entrySet().isNotEmpty()
+fun JsonObject.keys(): Collection<String> = entrySet().map { it.key }
+fun JsonObject.forEach(operation: (String, JsonElement) -> Unit): Unit = entrySet().forEach { operation(it.key, it.value) }
+fun JsonObject.toMap(): Map<String, JsonElement> = entrySet().associateBy({ it.key }, { it.value })
 
-public operator fun JsonArray.contains(value: Any): Boolean = contains(value.toJsonElement())
+operator fun JsonArray.contains(value: Any): Boolean = contains(value.toJsonElement())

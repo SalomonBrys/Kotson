@@ -1,5 +1,4 @@
-
-[![Kotlin 1.0.0-beta-2423](https://img.shields.io/badge/Kotlin-1.0.0--beta--2423-blue.svg)](http://kotlinlang.org)
+[![Kotlin 1.0 RC1](https://img.shields.io/badge/Kotlin-1.0.0--rc--1036-blue.svg)](http://kotlinlang.org)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
 [![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
 [![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
@@ -23,12 +22,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>1.7.0</version>
+    	<version>2.0.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:1.7.0'
+    compile 'com.github.salomonbrys.kotson:kotson:2.0.0'
 
  - version 1.1.0 is compatible with Kotlin M11
  - version 1.2.0 is compatible with Kotlin M12
@@ -37,15 +36,9 @@ Gradle:
  - version 1.5.0 is compatible with Kotlin 1.0.0-beta-1038
  - version 1.6.0 is compatible with Kotlin 1.0.0-beta-1103
  - version 1.7.0 is compatible with Kotlin 1.0.0-beta-2423
- - version 2.0.0-beta is compatible with Kotlin 1.0.0-beta-3595
+ - version 2.0.0-beta1 is compatible with Kotlin 1.0.0-beta-3595
+ - version 2.0.0 is compatible with Kotlin 1.0.0-rc-1036
 
-v2 documentation
-================
-
-TODO
-
-v1 documentation
-================
 
 Creating Json
 -------------
@@ -94,22 +87,42 @@ true.toJson()       // java: new JsonPrimitive(true);
 Setting custom (de)serializers
 ------------------------------
 
-If you need to register a `serializer` / `deserializer` / `InstanceCreator`, you can use one of those APIs:
+If you need to register a `serializer` / `deserializer` / `InstanceCreator`, you can use these "builder" APIs:
 
 ```kotlin
-gsonBuilder.serialize<MyType> { src, type, context -> /* return a JsonElement */ }
-gsonBuilder.serializeHierarchy<MyType> { src, type, context -> /* return a JsonElement */ }
-gsonBuilder.simpleSerialize<MyType> { src -> /* return a JsonElement */ }
-gsonBuilder.simpleSerializeHierarchy<MyType> { src -> /* return a JsonElement */ }
+gsonBuilder.registerTypeAdapter<MyType> {
+    serialize {
+        /*
+            it.type: Type to serialize from
+            it.context: GSon context
+            it.src : Object to serialize
+        */
+    }
+    
+    deserialize {
+        /*
+            it.type: Type to deserialize to
+            it.context: GSon context
+            it.json : JsonElement to deserialize from
+        */
+    }
+    
+    createInstances {
+        /*
+            it: Type of instance to create
+        */
+    }
+}
 
-gsonBuilder.deserialize<MyType> { json, type, context -> /* return a MyType */ }
-gsonBuilder.deserializeHierarchy<MyType> { json, type, context -> /* return a MyType */ }
-gsonBuilder.simpleDeserialize<MyType> { json -> /* return a MyType */ }
-gsonBuilder.simpleDeserializeHierarchy<MyType> { json -> /* return a MyType */ }
+gsonBuilder.registerTypeHierarchyAdapter<MyType> {
+    serialize { /* Same a above */ }
+    deserialize { /* Same a above */ }
+    createInstances { /* Same a above */ }
+}
 
-gsonBuilder.createInstances<MyType> { type -> /* return a new MyType */ }
-gsonBuilder.createHierarchyInstances<MyType> { type -> /* return a new MyType */ }
 ```
+
+Of course, you can declare only a serializer, a deserializer or an instance creator. You don't *have* to declare all three.
 
 
 Parsing JSON
@@ -210,4 +223,25 @@ class Person(public val obj: JsonObject) {
     val name: String by obj.byString("fullName") // Maps to obj["fullName"]
     val birthDate: Int by obj["dates"].byInt(0)  // Maps to obj["dates"][0]
 }
+```
+
+
+Version 1
+=========
+
+Version one only differs in the declaration of type adapters:
+
+```kotlin
+gsonBuilder.serialize<MyType> { src, type, context -> /* return a JsonElement */ }
+gsonBuilder.serializeHierarchy<MyType> { src, type, context -> /* return a JsonElement */ }
+gsonBuilder.simpleSerialize<MyType> { src -> /* return a JsonElement */ }
+gsonBuilder.simpleSerializeHierarchy<MyType> { src -> /* return a JsonElement */ }
+
+gsonBuilder.deserialize<MyType> { json, type, context -> /* return a MyType */ }
+gsonBuilder.deserializeHierarchy<MyType> { json, type, context -> /* return a MyType */ }
+gsonBuilder.simpleDeserialize<MyType> { json -> /* return a MyType */ }
+gsonBuilder.simpleDeserializeHierarchy<MyType> { json -> /* return a MyType */ }
+
+gsonBuilder.createInstances<MyType> { type -> /* return a new MyType */ }
+gsonBuilder.createHierarchyInstances<MyType> { type -> /* return a new MyType */ }
 ```

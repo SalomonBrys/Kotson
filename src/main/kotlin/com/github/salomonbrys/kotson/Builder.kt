@@ -2,13 +2,13 @@ package com.github.salomonbrys.kotson
 
 import com.google.gson.*
 
-public fun Number.toJson(): JsonPrimitive = JsonPrimitive(this)
+fun Number.toJson(): JsonPrimitive = JsonPrimitive(this)
 
-public fun Char.toJson(): JsonPrimitive = JsonPrimitive(this)
+fun Char.toJson(): JsonPrimitive = JsonPrimitive(this)
 
-public fun Boolean.toJson() : JsonPrimitive = JsonPrimitive(this)
+fun Boolean.toJson() : JsonPrimitive = JsonPrimitive(this)
 
-public fun String.toJson() : JsonPrimitive = JsonPrimitive(this)
+fun String.toJson() : JsonPrimitive = JsonPrimitive(this)
 
 internal fun Any?.toJsonElement(): JsonElement {
     if (this == null)
@@ -24,14 +24,14 @@ internal fun Any?.toJsonElement(): JsonElement {
     }
 }
 
-public fun jsonArray(vararg values: Any?): JsonArray {
+fun jsonArray(vararg values: Any?): JsonArray {
     val array = JsonArray()
     for (value in values)
         array.add(value.toJsonElement())
     return array;
 }
 
-public fun jsonObject(vararg values: Pair<String, Any?>): JsonObject {
+fun jsonObject(vararg values: Pair<String, Any?>): JsonObject {
     val obj = JsonObject()
     for ((key, value) in values) {
         obj.add(key, value.toJsonElement())
@@ -39,8 +39,8 @@ public fun jsonObject(vararg values: Pair<String, Any?>): JsonObject {
     return obj;
 }
 
-public fun JsonObject.shallowCopy(): JsonObject = JsonObject().apply { this@shallowCopy.entrySet().forEach { put(it) } }
-public fun JsonArray.shallowCopy(): JsonArray = JsonArray().apply { addAll(this@shallowCopy) }
+fun JsonObject.shallowCopy(): JsonObject = JsonObject().apply { this@shallowCopy.entrySet().forEach { put(it) } }
+fun JsonArray.shallowCopy(): JsonArray = JsonArray().apply { addAll(this@shallowCopy) }
 
 private fun JsonElement._deepCopy(): JsonElement {
     return when (this) {
@@ -51,6 +51,6 @@ private fun JsonElement._deepCopy(): JsonElement {
     }
 }
 
-public fun JsonObject.deepCopy(): JsonObject = JsonObject().apply { this@deepCopy.entrySet().forEach { add(it.key, it.value._deepCopy()) } }
+fun JsonObject.deepCopy(): JsonObject = JsonObject().apply { this@deepCopy.entrySet().forEach { add(it.key, it.value._deepCopy()) } }
 
-public fun JsonArray.deepCopy(): JsonArray = JsonArray().apply { this@deepCopy.forEach { add(it._deepCopy()) } }
+fun JsonArray.deepCopy(): JsonArray = JsonArray().apply { this@deepCopy.forEach { add(it._deepCopy()) } }
