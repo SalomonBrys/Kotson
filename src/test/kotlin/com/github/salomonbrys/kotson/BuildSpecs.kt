@@ -5,7 +5,7 @@ import org.jetbrains.spek.api.shouldBeTrue
 import org.jetbrains.spek.api.shouldEqual
 import java.util.*
 
-public class BuildSpecs : Spek({
+class BuildSpecs : Spek({
 
     given("a JsonObject with only primitives") {
 

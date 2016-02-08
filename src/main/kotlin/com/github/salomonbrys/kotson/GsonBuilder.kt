@@ -7,11 +7,14 @@ import java.lang.reflect.Type
 import java.lang.reflect.WildcardType
 
 
-inline fun <reified T: Any> typeToken(): Type {
-    val type = object : TypeToken<T>() {} .type
+inline fun <reified T: Any> typeToken(): Type  = object : TypeToken<T>() {} .type
+
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+inline fun <reified T: Any> registrationTypeToken(): Type {
+    val type = typeToken<T>()
 
     if (type is ParameterizedType) {
-        if (type.actualTypeArguments.any { it is WildcardType }) {
+        if (type.actualTypeArguments.any { it is WildcardType && Object::class.java in it.upperBounds }) {
             if (!type.actualTypeArguments.all { it is WildcardType })
                 throw IllegalArgumentException("Either none or all type parameters can be wildcard in $type")
             return type.rawType
@@ -34,7 +37,7 @@ fun <T: Any> instanceCreator(creator: (type: Type) -> T): InstanceCreator<T>
 
 
 inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(typeAdapter: Any): GsonBuilder
-        = this.registerTypeAdapter(typeToken<T>(), typeAdapter)
+        = this.registerTypeAdapter(registrationTypeToken<T>(), typeAdapter)
 
 inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(typeAdapter: Any): GsonBuilder
         = this.registerTypeHierarchyAdapter(T::class.java, typeAdapter)
@@ -78,7 +81,7 @@ class SimpleRegistrationBuilder<T: Any>(val builder: GsonBuilder, val type: Type
 }
 
 inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(noinline init: RegistrationBuilder<T>.() -> Unit): GsonBuilder {
-    SimpleRegistrationBuilder<T>(this, typeToken<T>()).init()
+    SimpleRegistrationBuilder<T>(this, registrationTypeToken<T>()).init()
     return this
 }
 
