@@ -22,22 +22,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>2.0.1</version>
+    	<version>2.1.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:2.0.1'
-
- - version 1.1.0 is compatible with Kotlin M11
- - version 1.2.0 is compatible with Kotlin M12
- - version 1.3.1 is compatible with Kotlin M13
- - version 1.4.1 is compatible with Kotlin M14
- - version 1.5.0 is compatible with Kotlin 1.0.0-beta-1038
- - version 1.6.0 is compatible with Kotlin 1.0.0-beta-1103
- - version 1.7.0 is compatible with Kotlin 1.0.0-beta-2423
- - version 2.0.0-beta1 is compatible with Kotlin 1.0.0-beta-3595
- - version 2.0.1 is compatible with Kotlin 1.0.0-rc-1036
+    compile 'com.github.salomonbrys.kotson:kotson:2.1.0'
 
 
 Creating Json

@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.0.0-rc-1036'
+    ext.kotlin_version = '1.0.0'
 
     repositories {
         mavenCentral()
@@ -15,7 +15,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "com.github.salomonbrys.kotson"
-version = '2.0.1'
+version = '2.1.0'
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -50,11 +50,11 @@ repositories {
 }
 
 dependencies {
-    compile "com.google.code.gson:gson:2.5"
+    compile "com.google.code.gson:gson:2.6.1"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testCompile 'org.jetbrains.spek:spek:0.1.194'
+    testCompile 'org.jetbrains.spek:spek:0.1.195'
 }
 
 test {
