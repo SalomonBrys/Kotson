@@ -1,4 +1,4 @@
-[![Kotlin 1.0 RC1](https://img.shields.io/badge/Kotlin-1.0.0--rc--1036-blue.svg)](http://kotlinlang.org)
+[![Kotlin 1.0](https://img.shields.io/badge/Kotlin-1.0.0-blue.svg)](http://kotlinlang.org)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
 [![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
 [![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
