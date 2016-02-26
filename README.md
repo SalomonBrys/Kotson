@@ -121,6 +121,14 @@ Parsing JSON
 Kotson provides a simple API that does not suffer from Java's type erasure. That means that whatever the output type, it will be parsed correctly and eliminates the need for `TypeToken`.
 
 ```kotlin
+import com.google.gson.GsonBuilder
+import com.github.salomonbrys.kotson.fromJson
+
+...
+
+val builder = GsonBuilder()
+val gson = builder.create()
+
 // java: List<User> list = gson.fromJson(src, new TypeToken<List<User>>(){}.getType());
 val list = gson.fromJson<List<User>>(jsonString)
 val list = gson.fromJson<List<User>>(jsonElement)
