@@ -55,10 +55,10 @@ val JsonElement?.nullObj: JsonObject? get() = _nullOr { obj }
 
 val jsonNull: JsonNull = JsonNull.INSTANCE
 
-operator fun JsonElement.get(key: String): JsonElement = obj.get(key) ?: throw NoSuchElementException()
+operator fun JsonElement.get(key: String): JsonElement = obj.getNotNull(key)
 operator fun JsonElement.get(index: Int): JsonElement = array.get(index)
 
-fun JsonObject.getNotNull(key: String): JsonElement = get(key) ?: throw NoSuchElementException()
+fun JsonObject.getNotNull(key: String): JsonElement = get(key) ?: throw NoSuchElementException("'$key' is not found")
 
 operator fun JsonObject.contains(key: String): Boolean = has(key)
 fun JsonObject.size(): Int = entrySet().size
