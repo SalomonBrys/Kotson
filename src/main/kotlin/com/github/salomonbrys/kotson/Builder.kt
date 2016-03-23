@@ -1,6 +1,7 @@
 package com.github.salomonbrys.kotson
 
 import com.google.gson.*
+import com.google.gson.stream.JsonWriter
 
 fun Number.toJson(): JsonPrimitive = JsonPrimitive(this)
 
@@ -54,3 +55,14 @@ private fun JsonElement._deepCopy(): JsonElement {
 fun JsonObject.deepCopy(): JsonObject = JsonObject().apply { this@deepCopy.entrySet().forEach { add(it.key, it.value._deepCopy()) } }
 
 fun JsonArray.deepCopy(): JsonArray = JsonArray().apply { this@deepCopy.forEach { add(it._deepCopy()) } }
+
+fun JsonWriter.value(value: Any) : JsonWriter {
+    return when (value) {
+        is Boolean -> value(value)
+        is Double -> value(value)
+        is Long -> value(value)
+        is Number -> value(value)
+        is String -> value(value)
+        else -> throw IllegalArgumentException("${this} cannot be written on JsonWriter")
+    }
+}

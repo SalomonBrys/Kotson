@@ -8,16 +8,15 @@ import org.jetbrains.spek.api.shouldBeTrue
 import org.jetbrains.spek.api.shouldEqual
 import java.lang.reflect.ParameterizedType
 
-class RegistrationSpecs : Spek({
+class SDRegistrationSpecs : Spek({
 
     given("a non-generic type adapter") {
-
         val gson = GsonBuilder()
-            .registerTypeAdapter<Person> {
-                serialize { jsonArray(it.src.name, it.src.age) }
-                deserialize { Person(it.json[0].string, it.json[1].int) }
-            }
-            .create()
+                .registerTypeAdapter<Person> {
+                    serialize { jsonArray(it.src.name, it.src.age) }
+                    deserialize { Person(it.json[0].string, it.json[1].int) }
+                }
+                .create()
 
         on("serialization") {
 
@@ -38,7 +37,6 @@ class RegistrationSpecs : Spek({
                 shouldEqual(Person("Salomon", 29), person)
             }
         }
-
     }
 
     given("a specialized type adapter") {
@@ -49,7 +47,7 @@ class RegistrationSpecs : Spek({
                 }
                 .create()
 
-        on("serialization") {
+        on("serializattion") {
 
             it("Should serialize specific type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", 29))
@@ -77,7 +75,6 @@ class RegistrationSpecs : Spek({
                 shouldThrow<JsonSyntaxException> { gson.fromJson<GenericPerson<String>>("[\"Salomon\", \"Brys\"]") }
             }
         }
-
     }
 
     given("a generic type adapter") {
@@ -121,9 +118,7 @@ class RegistrationSpecs : Spek({
 
                 shouldEqual(GenericPerson("Salomon", "Brys"), person)
             }
-
         }
-
     }
 
 })

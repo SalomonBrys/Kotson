@@ -5,7 +5,7 @@ data class Person(
         val age: Int
 )
 
-data class GenericPerson<out T>(
+data class GenericPerson<out T : Any>(
         val name: String,
         val info: T
 )

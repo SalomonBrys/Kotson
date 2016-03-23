@@ -81,6 +81,7 @@ If you need to register a `serializer` / `deserializer` / `InstanceCreator`, you
 
 ```kotlin
 gsonBuilder.registerTypeAdapter<MyType> {
+
     serialize {
         /*
             it.type: Type to serialize from
@@ -102,6 +103,7 @@ gsonBuilder.registerTypeAdapter<MyType> {
             it: Type of instance to create
         */
     }
+
 }
 
 gsonBuilder.registerTypeHierarchyAdapter<MyType> {
@@ -113,6 +115,46 @@ gsonBuilder.registerTypeHierarchyAdapter<MyType> {
 ```
 
 Of course, you can declare only a serializer, a deserializer or an instance creator. You don't *have* to declare all three.
+
+
+Setting custom Readers and Writers
+----------------------------------
+
+Gson has another API (named Stream API) that allows to register writers (to `JsonWriter`) and readers (from `JsonReader`).  
+Here is an example for a simple `Person` class:
+
+```kotlin
+gsonBuilder.registerTypeAdapter<Person> {
+
+    write {
+        beginArray()
+        value(it.name)
+        value(it.age)
+        endArray()
+    }
+    
+    read {
+        beginArray()
+        val name = nextString()
+        val age = nextInt()
+        endArray()
+
+        Person(name, age)
+    }
+
+}
+
+```
+
+While a bit more complex and difficult to handle, this API is also better optimized. So if you're after performance, I recommend you use this API.
+
+Using this API has a few drawbacks:
+
+ * You must define both `write` and `read`
+ * You cannot use a mix (`serialize` + `read` or `write` + `deserialize`).
+ * In `read`, you cannot access the exact object type that you are deserializing to (the `it.type` of deserialize).
+
+If you wish to register a nullable reader or writer, you can use `registerNullableTypeAdapter` instead.
 
 
 Parsing JSON
