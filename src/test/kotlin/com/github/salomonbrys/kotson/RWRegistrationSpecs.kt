@@ -11,11 +11,13 @@ class RWRegistrationSpecs : Spek({
 
     given("a non-generic stream type adapter") {
 
+        val adapter = typeAdapter<Person> {
+            write { beginArray().value(it.name).value(it.age).endArray() }
+            read { beginArray() ; val p = Person(nextString(), nextInt()) ; endArray() ; p }
+        }
+
         val gson = GsonBuilder()
-                .registerTypeAdapter<Person> {
-                    write { beginArray().value(it.name).value(it.age).endArray() }
-                    read { beginArray() ; val p = Person(nextString(), nextInt()) ; endArray() ; p }
-                }
+                .registerTypeAdapter<Person>(adapter)
                 .create()
 
         on("serialization") {

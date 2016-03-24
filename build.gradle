@@ -15,7 +15,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "com.github.salomonbrys.kotson"
-version = '2.2.0-beta1'
+version = '2.2.0-beta2'
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
