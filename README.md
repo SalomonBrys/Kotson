@@ -116,6 +116,19 @@ gsonBuilder.registerTypeHierarchyAdapter<MyType> {
 
 Of course, you can declare only a serializer, a deserializer or an instance creator. You don't *have* to declare all three.
 
+You don't have to declare all your `JsonSerializer`s, `JsonDeserializer`s and `InstanceCreator`s where you initialize Gson.
+Kotson allows you to create those type adapters in different files using the functions `jsonSerializer`, `jsonDeserializer` and `instanceCreator`.
+You will then be able to register those when creating the Gson object:
+
+```kotlin
+TypeAdapters.kt:
+val personSerializer = jsonSerializer { /* Same arguments as before */ }
+
+Main.kt:
+/*...*/
+gsonBuilder.registerTypeAdapter<Person>(personSerializer).
+```
+
 
 Setting custom Readers and Writers
 ----------------------------------
@@ -155,6 +168,25 @@ Using this API has a few drawbacks:
  * In `read`, you cannot access the exact object type that you are deserializing to (the `it.type` of deserialize).
 
 If you wish to register a nullable reader or writer, you can use `registerNullableTypeAdapter` instead.
+
+You don't have to declare all your `TypeAdapter`s where you initialize Gson.
+Kotson allows you to create those type adapters in different files using the functions `typeAdapter` and `nullableTypeAdapter`.
+You will then be able to register those when creating the Gson object:
+
+```kotlin
+TypeAdapters.kt:
+val personTypeAdapter = typeAdapter<Person> {
+    write { /*...*/ }
+    read { /*...*/ }
+}
+
+Main.kt:
+/*...*/
+gsonBuilder.registerTypeAdapter<Person>(personSerializer).
+```
+
+Kotson provides no utility function for the `TypeAdapterFactory` interface.
+Because this interface defines a generic function, there is currently no other way to use it other than implementing it on a regular `object` or `class`.
 
 
 Parsing JSON
