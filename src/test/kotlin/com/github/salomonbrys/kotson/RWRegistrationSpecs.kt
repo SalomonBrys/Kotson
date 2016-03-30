@@ -4,8 +4,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
-import org.jetbrains.spek.api.shouldBeTrue
-import org.jetbrains.spek.api.shouldEqual
+import org.jetbrains.spek.api.Spek
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class RWRegistrationSpecs : Spek({
 
@@ -25,9 +27,9 @@ class RWRegistrationSpecs : Spek({
             it("Should serialize accordingly") {
                 val json = gson.toJsonTree(Person("Salomon", 29))
 
-                shouldBeTrue(json is JsonArray)
-                shouldEqual("Salomon", json[0].string)
-                shouldEqual(29, json[1].int)
+                assertTrue(json is JsonArray)
+                assertEquals("Salomon", json[0].string)
+                assertEquals(29, json[1].int)
             }
         }
 
@@ -36,7 +38,7 @@ class RWRegistrationSpecs : Spek({
             it("Should deserialize accordingly") {
                 val person = gson.fromJson<Person>("[\"Salomon\", 29]")
 
-                shouldEqual(Person("Salomon", 29), person)
+                assertEquals(Person("Salomon", 29), person)
             }
         }
     }
@@ -54,14 +56,14 @@ class RWRegistrationSpecs : Spek({
 
             it("Should serialize specific type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", 29))
-                shouldBeTrue(json is JsonArray)
-                shouldEqual("Salomon", json[0].string)
-                shouldEqual(29, json[1].int)
+                assertTrue(json is JsonArray)
+                assertEquals("Salomon", json[0].string)
+                assertEquals(29, json[1].int)
             }
 
             it("Should not serialize differently parameterized type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", "Brys"))
-                shouldBeTrue(json is JsonObject)
+                assertTrue(json is JsonObject)
             }
 
         }
@@ -71,11 +73,11 @@ class RWRegistrationSpecs : Spek({
             it("Should deserialize specific type accordingly") {
                 val person = gson.fromJson<GenericPerson<Int>>("[\"Salomon\", 29]")
 
-                shouldEqual(GenericPerson("Salomon", 29), person)
+                assertEquals(GenericPerson("Salomon", 29), person)
             }
 
             it("Should not deserialize differently parameterized type accordingly") {
-                shouldThrow<JsonSyntaxException> { gson.fromJson<GenericPerson<String>>("[\"Salomon\", \"Brys\"]") }
+                assertFailsWith<JsonSyntaxException> { gson.fromJson<GenericPerson<String>>("[\"Salomon\", \"Brys\"]") }
             }
         }
     }
@@ -83,7 +85,7 @@ class RWRegistrationSpecs : Spek({
     given ("a bad type adapter") {
         on("definition of both serialize and read") {
             it("should throw an exception") {
-                shouldThrow<IllegalArgumentException> {
+                val e = assertFailsWith<IllegalArgumentException> {
                     val gson = GsonBuilder()
                             .registerTypeAdapter<Person> {
                                 serialize { jsonArray(it.src.name, it.src.age) }
@@ -96,7 +98,7 @@ class RWRegistrationSpecs : Spek({
 
         on("definition of only write") {
             it("should throw an exception") {
-                shouldThrow<IllegalArgumentException> {
+                assertFailsWith<IllegalArgumentException> {
                     val gson = GsonBuilder()
                             .registerTypeAdapter<Person> {
                                 write { beginArray().value(it.name).value(it.age).endArray() }

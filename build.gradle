@@ -54,7 +54,7 @@ dependencies {
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testCompile 'org.jetbrains.spek:spek:0.1.195'
+    testCompile 'org.jetbrains.spek:spek:1.0.0'
 }
 
 test {

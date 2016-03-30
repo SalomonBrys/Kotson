@@ -2,9 +2,10 @@ package com.github.salomonbrys.kotson
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import org.jetbrains.spek.api.shouldBeFalse
-import org.jetbrains.spek.api.shouldBeTrue
-import org.jetbrains.spek.api.shouldEqual
+import org.jetbrains.spek.api.Spek
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class CopySpecs : Spek({
 
@@ -32,19 +33,19 @@ class CopySpecs : Spek({
             change(obj)
 
             it("should contain the same objects and arrays") {
-                shouldBeTrue(obj["object"] === cop["object"])
-                shouldBeTrue(obj["array"] === cop["array"])
+                assertTrue(obj["object"] === cop["object"])
+                assertTrue(obj["array"] === cop["array"])
 
-                shouldEqual(42, cop["object"]["answer"].int)
-                shouldEqual("b", cop["array"][1].string)
+                assertEquals(42, cop["object"]["answer"].int)
+                assertEquals("b", cop["array"][1].string)
             }
 
             it("should not contain post copy direct modification") {
-                shouldEqual(1, cop["number"].int)
-                shouldEqual(2, obj["number"].int)
+                assertEquals(1, cop["number"].int)
+                assertEquals(2, obj["number"].int)
 
-                shouldBeFalse("add" in cop)
-                shouldBeTrue("add" in obj)
+                assertFalse("add" in cop)
+                assertTrue("add" in obj)
             }
         }
 
@@ -54,21 +55,21 @@ class CopySpecs : Spek({
             change(obj)
 
             it("should not contain the same objects and arrays") {
-                shouldBeTrue(obj["object"] !== cop["object"])
-                shouldBeTrue(obj["array"] !== cop["array"])
+                assertTrue(obj["object"] !== cop["object"])
+                assertTrue(obj["array"] !== cop["array"])
 
-                shouldEqual(21, cop["object"]["answer"].int)
-                shouldEqual(42, obj["object"]["answer"].int)
-                shouldEqual("c", cop["array"][1].string)
-                shouldEqual("b", obj["array"][1].string)
+                assertEquals(21, cop["object"]["answer"].int)
+                assertEquals(42, obj["object"]["answer"].int)
+                assertEquals("c", cop["array"][1].string)
+                assertEquals("b", obj["array"][1].string)
             }
 
             it("should not contain post copy direct modification") {
-                shouldEqual(1, cop["number"].int)
-                shouldEqual(2, obj["number"].int)
+                assertEquals(1, cop["number"].int)
+                assertEquals(2, obj["number"].int)
 
-                shouldBeFalse("add" in cop)
-                shouldBeTrue("add" in obj)
+                assertFalse("add" in cop)
+                assertTrue("add" in obj)
             }
         }
     }
@@ -98,19 +99,19 @@ class CopySpecs : Spek({
             change(arr)
 
             it("should contain the same objects and arrays") {
-                shouldBeTrue(arr[1] === cop[1])
-                shouldBeTrue(arr[2] === cop[2])
+                assertTrue(arr[1] === cop[1])
+                assertTrue(arr[2] === cop[2])
 
-                shouldEqual(42, cop[1]["answer"].int)
-                shouldEqual("b", cop[2][1].string)
+                assertEquals(42, cop[1]["answer"].int)
+                assertEquals("b", cop[2][1].string)
             }
 
             it("should not contain post copy direct modification") {
-                shouldEqual(1, cop[0].int)
-                shouldEqual(2, arr[0].int)
+                assertEquals(1, cop[0].int)
+                assertEquals(2, arr[0].int)
 
-                shouldBeFalse("ok" in cop)
-                shouldBeTrue("ok" in arr)
+                assertFalse("ok" in cop)
+                assertTrue("ok" in arr)
             }
         }
 
@@ -120,21 +121,21 @@ class CopySpecs : Spek({
             change(arr)
 
             it("should not contain the same objects and arrays") {
-                shouldBeTrue(arr[1] !== cop[1])
-                shouldBeTrue(arr[2] !== cop[2])
+                assertTrue(arr[1] !== cop[1])
+                assertTrue(arr[2] !== cop[2])
 
-                shouldEqual(21, cop[1]["answer"].int)
-                shouldEqual(42, arr[1]["answer"].int)
-                shouldEqual("c", cop[2][1].string)
-                shouldEqual("b", arr[2][1].string)
+                assertEquals(21, cop[1]["answer"].int)
+                assertEquals(42, arr[1]["answer"].int)
+                assertEquals("c", cop[2][1].string)
+                assertEquals("b", arr[2][1].string)
             }
 
             it("should not contain post copy direct modification") {
-                shouldEqual(1, cop[0].int)
-                shouldEqual(2, arr[0].int)
+                assertEquals(1, cop[0].int)
+                assertEquals(2, arr[0].int)
 
-                shouldBeFalse("ok" in cop)
-                shouldBeTrue("ok" in arr)
+                assertFalse("ok" in cop)
+                assertTrue("ok" in arr)
             }
         }
     }

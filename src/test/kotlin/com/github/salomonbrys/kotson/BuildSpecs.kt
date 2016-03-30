@@ -1,9 +1,11 @@
 package com.github.salomonbrys.kotson
 
-import org.jetbrains.spek.api.shouldBeNull
-import org.jetbrains.spek.api.shouldBeTrue
-import org.jetbrains.spek.api.shouldEqual
+import org.jetbrains.spek.api.Spek
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class BuildSpecs : Spek({
 
@@ -21,30 +23,28 @@ class BuildSpecs : Spek({
 
             it("should contain corresponding JSonPrimitives") {
 
-                shouldEqual(42.toJson(), obj["number"])
-                shouldEqual('c'.toJson(), obj["char"])
-                shouldEqual(true.toJson(), obj["bool"])
-                shouldEqual("Hello, world!".toJson(), obj["string"])
-                shouldEqual(jsonNull, obj["null"])
+                assertEquals(42.toJson(), obj["number"])
+                assertEquals('c'.toJson(), obj["char"])
+                assertEquals(true.toJson(), obj["bool"])
+                assertEquals("Hello, world!".toJson(), obj["string"])
+                assertEquals(jsonNull, obj["null"])
 
             }
 
             it("should have only the declared values") {
-                shouldEqual(5, obj.size())
+                assertEquals(5, obj.size())
             }
         }
 
         on("queried for an inexisting key") {
 
             it("should throw a NoSuchElementException when queried with getNotNull") {
-
-                shouldThrow<NoSuchElementException> { obj.getNotNull("nothing") }
-
+                assertFailsWith<NoSuchElementException> { obj.getNotNull("nothing") }
             }
 
             it("should return null when queried with get") {
 
-                shouldBeNull(obj["nothing"])
+                assertNull(obj["nothing"])
 
             }
 
@@ -53,7 +53,7 @@ class BuildSpecs : Spek({
         on("queried for an index") {
 
             it("should throw an IllegalStateException") {
-                shouldThrow<IllegalStateException> { obj[42] }
+                assertFailsWith<IllegalStateException> { obj[42] }
             }
 
         }
@@ -73,25 +73,23 @@ class BuildSpecs : Spek({
 
             it("should contain corresponding JSonPrimitives") {
 
-                shouldEqual(42.toJson(), array[0])
-                shouldEqual('c'.toJson(), array[1])
-                shouldEqual(true.toJson(), array[2])
-                shouldEqual("Hello, world!".toJson(), array[3])
-                shouldEqual(jsonNull, array[4])
+                assertEquals(42.toJson(), array[0])
+                assertEquals('c'.toJson(), array[1])
+                assertEquals(true.toJson(), array[2])
+                assertEquals("Hello, world!".toJson(), array[3])
+                assertEquals(jsonNull, array[4])
 
             }
 
             it("should have only the declared values") {
-                shouldEqual(5, array.size())
+                assertEquals(5, array.size())
             }
         }
 
         on("queried for an inexisting index") {
 
             it("should throw a IndexOutOfBoundsException") {
-
-                shouldThrow<IndexOutOfBoundsException> { array[5] }
-
+                assertFailsWith<IndexOutOfBoundsException> { array[5] }
             }
 
         }
@@ -99,7 +97,7 @@ class BuildSpecs : Spek({
         on("queried for a key") {
 
             it("should throw an IllegalStateException") {
-                shouldThrow<IllegalStateException> { array["nothing"] }
+                assertFailsWith<IllegalStateException> { array["nothing"] }
             }
 
         }
@@ -128,11 +126,11 @@ class BuildSpecs : Spek({
 
             it ("should give the correct values") {
 
-                shouldEqual(42, obj["number"].int)
-                shouldEqual('c', obj["a1"][0].char)
-                shouldBeTrue(obj["a1"][1]["bool"].bool)
-                shouldEqual("Hello, world!", obj["a1"][1]["a2"][0].string)
-                shouldBeNull(obj["a1"][1]["a2"][1]["null"].nullObj)
+                assertEquals(42, obj["number"].int)
+                assertEquals('c', obj["a1"][0].char)
+                assertTrue(obj["a1"][1]["bool"].bool)
+                assertEquals("Hello, world!", obj["a1"][1]["a2"][0].string)
+                assertNull(obj["a1"][1]["a2"][1]["null"].nullObj)
 
             }
 
