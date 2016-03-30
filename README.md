@@ -22,12 +22,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>2.1.0</version>
+    	<version>2.2.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:2.1.0'
+    compile 'com.github.salomonbrys.kotson:kotson:2.2.0'
 
 
 Creating Json
@@ -229,6 +229,10 @@ Attention: `gson.fromJson<MyType>` will return a non-nullable type whereas `gson
 
 A lot of Gson's APIs are relying on `java.lang.reflect.Type` to specify a type, but Kotlin's `javaClass` returns a `java.lang.Class` which is a Type but suffers from type erasure. To mediate this issue, Gson uses `TypeToken` to create `java.lang.reflect.Type` objects without type erasure.
 If you need such a Type object, you can simply use the `typeToken` function the same way you use the `javaClass` function. For example: `typeToken<Map<String, List<User>>>()`
+
+Careful: the `typeToken` function behaves slightly differently then Gson's `TypeToken` class.
+When providing a non-specialized generic type, `typeToken<List<*>>` will return `Class<List>` (while Gson's mechanism will return a `ParameterizedType`).
+If you really need a `ParameterizedType` for a non-specialized generic type, you can use the `gsonTypeToken` function.
 
 
 Browsing Json Elements
