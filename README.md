@@ -36,6 +36,8 @@ Creating Json
 JsonObject:
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 val obj: JsonObject = jsonObject(
     "name" to "kotson",
     "creation" to Date().getTime(),
@@ -46,12 +48,16 @@ val obj: JsonObject = jsonObject(
 JsonArray:
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 val arr: JsonArray = jsonArray("one", "two", 42, 21.5)
 ```
 
 Of course, a combination of both:
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 val obj: JsonObject = jsonObject(
     "property" to "value",
     "array" to jsonArray(
@@ -65,12 +71,14 @@ val obj: JsonObject = jsonObject(
 JsonPrimitives:
 
 ```kotlin
-42.toJson()         // java: new JsonPrimitive(42);
-42.21f.toJson()     // java: new JsonPrimitive(42.21f);
-42.21.toJson()      // java: new JsonPrimitive(42.21d);
-"coucou".toJson()   // java: new JsonPrimitive("coucou");
-'c'.toJson()        // java: new JsonPrimitive('c');
-true.toJson()       // java: new JsonPrimitive(true);
+import com.github.salomonbrys.kotson.*
+
+val pi = 42.toJson()         // java: new JsonPrimitive(42);
+val pf = 42.21f.toJson()     // java: new JsonPrimitive(42.21f);
+val pd = 42.21.toJson()      // java: new JsonPrimitive(42.21d);
+val pc = 'c'.toJson()        // java: new JsonPrimitive('c');
+val pz = true.toJson()       // java: new JsonPrimitive(true);
+val os = "coucou".toJson()   // java: new JsonPrimitive("coucou");
 ```
 
 
@@ -80,38 +88,40 @@ Setting custom (de)serializers
 If you need to register a `serializer` / `deserializer` / `InstanceCreator`, you can use these "builder" APIs:
 
 ```kotlin
-gsonBuilder.registerTypeAdapter<MyType> {
+import com.github.salomonbrys.kotson.*
 
-    serialize {
-        /*
-            it.type: Type to serialize from
-            it.context: GSon context
-            it.src : Object to serialize
-        */
-    }
+val gson = GsonBuilder()
+    .registerTypeAdapter<MyType> {
     
-    deserialize {
-        /*
-            it.type: Type to deserialize to
-            it.context: GSon context
-            it.json : JsonElement to deserialize from
-        */
-    }
+        serialize {
+            /*
+                it.type: Type to serialize from
+                it.context: GSon context
+                it.src : Object to serialize
+            */
+        }
+        
+        deserialize {
+            /*
+                it.type: Type to deserialize to
+                it.context: GSon context
+                it.json : JsonElement to deserialize from
+            */
+        }
+        
+        createInstances {
+            /*
+                it: Type of instance to create
+            */
+        }
     
-    createInstances {
-        /*
-            it: Type of instance to create
-        */
     }
-
-}
-
-gsonBuilder.registerTypeHierarchyAdapter<MyType> {
-    serialize { /* Same a above */ }
-    deserialize { /* Same a above */ }
-    createInstances { /* Same a above */ }
-}
-
+    .registerTypeHierarchyAdapter<MyOtherType> {
+        serialize { /* Same a above */ }
+        deserialize { /* Same a above */ }
+        createInstances { /* Same a above */ }
+    }
+    .create()
 ```
 
 Of course, you can declare only a serializer, a deserializer or an instance creator. You don't *have* to declare all three.
@@ -122,11 +132,14 @@ You will then be able to register those when creating the Gson object:
 
 ```kotlin
 TypeAdapters.kt:
+import com.github.salomonbrys.kotson.*
+
 val personSerializer = jsonSerializer { /* Same arguments as before */ }
 
 Main.kt:
-/*...*/
-gsonBuilder.registerTypeAdapter<Person>(personSerializer).
+import com.github.salomonbrys.kotson.*
+
+val gson = GsonBuilder().registerTypeAdapter<Person>(personSerializer).create()
 ```
 
 
@@ -137,26 +150,29 @@ Gson has another API (named Stream API) that allows to register writers (to `Jso
 Here is an example for a simple `Person` class:
 
 ```kotlin
-gsonBuilder.registerTypeAdapter<Person> {
+import com.github.salomonbrys.kotson.*
 
-    write {
-        beginArray()
-        value(it.name)
-        value(it.age)
-        endArray()
-    }
+val gson = GsonBuilder()
+    .registerTypeAdapter<Person> {
     
-    read {
-        beginArray()
-        val name = nextString()
-        val age = nextInt()
-        endArray()
-
-        Person(name, age)
+        write {
+            beginArray()
+            value(it.name)
+            value(it.age)
+            endArray()
+        }
+        
+        read {
+            beginArray()
+            val name = nextString()
+            val age = nextInt()
+            endArray()
+    
+            Person(name, age)
+        }
+    
     }
-
-}
-
+    .create()
 ```
 
 While a bit more complex and difficult to handle, this API is also better optimized. So if you're after performance, I recommend you use this API.
@@ -175,14 +191,17 @@ You will then be able to register those when creating the Gson object:
 
 ```kotlin
 TypeAdapters.kt:
+import com.github.salomonbrys.kotson.*
+
 val personTypeAdapter = typeAdapter<Person> {
     write { /*...*/ }
     read { /*...*/ }
 }
 
 Main.kt:
-/*...*/
-gsonBuilder.registerTypeAdapter<Person>(personSerializer).
+import com.github.salomonbrys.kotson.*
+
+val gson = GsonBuilder().registerTypeAdapter<Person>(personSerializer).create()
 ```
 
 Kotson provides no utility function for the `TypeAdapterFactory` interface.
@@ -195,19 +214,15 @@ Parsing JSON
 Kotson provides a simple API that does not suffer from Java's type erasure. That means that whatever the output type, it will be parsed correctly and eliminates the need for `TypeToken`.
 
 ```kotlin
-import com.google.gson.GsonBuilder
-import com.github.salomonbrys.kotson.fromJson
+import com.github.salomonbrys.kotson.*
 
-...
-
-val builder = GsonBuilder()
-val gson = builder.create()
+val gson = Gson()
 
 // java: List<User> list = gson.fromJson(src, new TypeToken<List<User>>(){}.getType());
-val list = gson.fromJson<List<User>>(jsonString)
-val list = gson.fromJson<List<User>>(jsonElement)
-val list = gson.fromJson<List<User>>(jsonReader)
-val list = gson.fromJson<List<User>>(reader)
+val list1 = gson.fromJson<List<User>>(jsonString)
+val list2 = gson.fromJson<List<User>>(jsonElement)
+val list3 = gson.fromJson<List<User>>(jsonReader)
+val list4 = gson.fromJson<List<User>>(reader)
 ```
 
 Attention: `gson.fromJson<MyType>` will return a non-nullable type whereas `gson.fromJson<MyType?>` will return a nullable type. Therefore the code `gson.fromJson<MyType>("null")` is correct and will throw a null-pointer exception!
@@ -221,15 +236,17 @@ Browsing Json Elements
 
 Kotson allows you to simply convert a jsonElement to a primitive, a `JsonObject` or a `JsonArray`:
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 val s = json.string // java: String s = json.getAsString();
 val i = json.int    // java: int i = json.getAsBoolean();
 val a = json.array  // java: JsonArray = json.getAsJsonArray();
 val o = json.obj    // java: JsonObject = json.getAsJsonObject();
 
-val s = json.nullString // java: String s = json.isJsonNull() ? null : json.getAsString();
-val i = json.nullInt    // java: Integer i = json.isJsonNull() ? null : json.getAsInt();
-val a = json.nullArray  // java: JsonArray = json.isJsonNull() ? null : json.getAsJsonArray();
-val o = json.nullObj    // java: JsonObject = json.isJsonNull() ? null : json.getAsJsonObject();
+val ns = json.nullString // java: String s = json.isJsonNull() ? null : json.getAsString();
+val ni = json.nullInt    // java: Integer i = json.isJsonNull() ? null : json.getAsInt();
+val na = json.nullArray  // java: JsonArray = json.isJsonNull() ? null : json.getAsJsonArray();
+val no = json.nullObj    // java: JsonObject = json.isJsonNull() ? null : json.getAsJsonObject();
 ```
 
 The same APIs exist for `.string`, `.bool`, `.byte`, `.char`, `.short`, `.int`, `.long`, `.float`, `.double`, `.number`, `.bigInteger`, `.bigDecimal`, `.array`, `.obj`
@@ -238,6 +255,8 @@ Kotson provides a simple API that allows you to easily browse `JsonElement`, `Js
 
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 // java: JsonElement components = colors.getAsJsonObject().get("orange");
 val components = colors["orange"]
 
@@ -261,6 +280,8 @@ Mutating Json Elements
 Kotson allows you to mutate a `JsonObject` or a `JsonArray`:
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 val array = jsonArray("zero", "x", "two")
 array[1] = "one"
 array += "three"
@@ -279,6 +300,8 @@ Copying Json Elements
 Kotson allows you to make a shallow copy (single-level copy) or a deep copy (recursive copy) of a `JsonObject` or a `JsonArray`:
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 val shallow = json.shallowCopy()
 val deep = json.deepCopy()
 ```
@@ -290,6 +313,8 @@ Accessing object fields via property delegates
 Kotson allows you to delegate properties to `JsonObject` fields:
 
 ```kotlin
+import com.github.salomonbrys.kotson.*
+
 class Person(public val obj: JsonObject) {
     val id: String by obj.byString               // Maps to obj["id"]
     val name: String by obj.byString("fullName") // Maps to obj["fullName"]
