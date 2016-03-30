@@ -62,18 +62,23 @@ fun <T: Any> jsonDeserializer(deserializer: (arg: DeserializerArg) -> T?): JsonD
 fun <T: Any> instanceCreator(creator: (type: Type) -> T): InstanceCreator<T>
         = InstanceCreator { creator(it) }
 
-class TypeAdapterBuilder<T: Any, R: T?>(
+interface TypeAdapterBuilder<T: Any, R : T?> {
+    fun read(function: JsonReader.() -> R)
+    fun write(function: JsonWriter.(value: T) -> Unit)
+}
+
+internal class TypeAdapterBuilderImpl<T: Any, R: T?>(
         init: TypeAdapterBuilder<T, R>.() -> Unit
-) {
+) : TypeAdapterBuilder<T, R> {
 
     private var _readFunction: (JsonReader.() -> R)? = null
     private var _writeFunction: (JsonWriter.(value: T) -> Unit)? = null
 
-    fun read(function: JsonReader.() -> R) {
+    override fun read(function: JsonReader.() -> R) {
         _readFunction = function
     }
 
-    fun write(function: JsonWriter.(value: T) -> Unit) {
+    override fun write(function: JsonWriter.(value: T) -> Unit) {
         _writeFunction = function
     }
 
@@ -89,8 +94,8 @@ class TypeAdapterBuilder<T: Any, R: T?>(
     }
 }
 
-fun <T: Any> typeAdapter(init: TypeAdapterBuilder<T, T>.() -> Unit): TypeAdapter<T> = TypeAdapterBuilder(init).build()
-fun <T: Any> nullableTypeAdapter(init: TypeAdapterBuilder<T, T?>.() -> Unit): TypeAdapter<T> = TypeAdapterBuilder<T, T?>(init).build().nullSafe()
+fun <T: Any> typeAdapter(init: TypeAdapterBuilder<T, T>.() -> Unit): TypeAdapter<T> = TypeAdapterBuilderImpl(init).build()
+fun <T: Any> nullableTypeAdapter(init: TypeAdapterBuilder<T, T?>.() -> Unit): TypeAdapter<T> = TypeAdapterBuilderImpl<T, T?>(init).build().nullSafe()
 
 
 
@@ -101,12 +106,18 @@ inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(typeAdapter
         = this.registerTypeHierarchyAdapter(T::class.java, typeAdapter)
 
 
+interface RegistrationBuilder<T: Any, R : T?> : TypeAdapterBuilder<T, R> {
+    fun serialize(serializer: (arg: SerializerArg<T>) -> JsonElement)
+    fun deserialize(deserializer: (DeserializerArg) -> T?)
+    fun createInstances(creator: (type: Type) -> T)
+}
 
-class RegistrationBuilder<T: Any, R : T?>(
+
+internal class RegistrationBuilderImpl<T: Any, R : T?>(
         init: RegistrationBuilder<T, R>.() -> Unit,
         private val _typeAdapterFactory: (TypeAdapterBuilder<T, R>.() -> Unit) -> TypeAdapter<T>,
         protected val register: (typeAdapter: Any) -> Unit
-) {
+) : RegistrationBuilder<T, R> {
 
     protected enum class _API { SD, RW }
 
@@ -121,17 +132,17 @@ class RegistrationBuilder<T: Any, R : T?>(
         _api = api
     }
 
-    fun serialize(serializer: (arg: SerializerArg<T>) -> JsonElement) {
+    override fun serialize(serializer: (arg: SerializerArg<T>) -> JsonElement) {
         _checkApi(_API.SD)
         register(jsonSerializer(serializer))
     }
 
-    fun deserialize(deserializer: (DeserializerArg) -> T?) {
+    override fun deserialize(deserializer: (DeserializerArg) -> T?) {
         _checkApi(_API.SD)
         register(jsonDeserializer(deserializer))
     }
 
-    fun createInstances(creator: (type: Type) -> T) = register(instanceCreator(creator))
+    override fun createInstances(creator: (type: Type) -> T) = register(instanceCreator(creator))
 
     private fun _registerTypeAdapter() {
         _checkApi(_API.RW)
@@ -144,12 +155,12 @@ class RegistrationBuilder<T: Any, R : T?>(
         _writeFunction = null
     }
 
-    fun read(function: JsonReader.() -> R) {
+    override fun read(function: JsonReader.() -> R) {
         _readFunction = function
         _registerTypeAdapter()
     }
 
-    fun write(function: JsonWriter.(value: T) -> Unit) {
+    override fun write(function: JsonWriter.(value: T) -> Unit) {
         _writeFunction = function
         _registerTypeAdapter()
     }
@@ -164,26 +175,34 @@ class RegistrationBuilder<T: Any, R : T?>(
 }
 
 
-inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(noinline init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
-    val type = typeToken<T>()
-    RegistrationBuilder(init, { typeAdapter(it) },  { registerTypeAdapter(type, it) })
+fun <T: Any> GsonBuilder.registerTypeAdapterBuilder(type: Type, init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
+    RegistrationBuilderImpl(init, { typeAdapter(it) }, { registerTypeAdapter(type, it) })
     return this
 }
 
-inline fun <reified T: Any> GsonBuilder.registerNullableTypeAdapter(noinline init: RegistrationBuilder<T, T?>.() -> Unit): GsonBuilder {
-    val type = typeToken<T>()
-    RegistrationBuilder<T, T?>(init, { nullableTypeAdapter(it) },  { registerTypeAdapter(type, it) })
+inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(noinline init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder
+        = registerTypeAdapterBuilder(typeToken<T>(), init)
+
+fun <T: Any> GsonBuilder.registerNullableTypeAdapterBuilder(type: Type, init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder {
+    registerTypeAdapter(type, nullableTypeAdapter(init))
     return this
 }
 
-inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(noinline init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
-    val type = T::class.java
-    RegistrationBuilder(init, { typeAdapter(it) },  { registerTypeHierarchyAdapter(type, it) })
+inline fun <reified T: Any> GsonBuilder.registerNullableTypeAdapter(noinline init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder
+        = registerNullableTypeAdapterBuilder(typeToken<T>(), init)
+
+fun <T: Any> GsonBuilder.registerTypeHierarchyAdapterBuilder(type: Class<T>, init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
+    RegistrationBuilderImpl(init, { typeAdapter(it) }, { registerTypeHierarchyAdapter(type, it) })
     return this
 }
 
-inline fun <reified T: Any> GsonBuilder.registerNullableTypeHierarchyAdapter(noinline init: RegistrationBuilder<T, T?>.() -> Unit): GsonBuilder {
-    val type = T::class.java
-    RegistrationBuilder<T, T?>(init, { nullableTypeAdapter(it) },  { registerTypeHierarchyAdapter(type, it) })
+inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(noinline init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder
+        = registerTypeHierarchyAdapterBuilder(T::class.java, init)
+
+fun <T: Any> GsonBuilder.registerNullableTypeHierarchyAdapterBuilder(type: Class<T>, init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder {
+    registerTypeHierarchyAdapter(type, nullableTypeAdapter(init))
     return this
 }
+
+inline fun <reified T: Any> GsonBuilder.registerNullableTypeHierarchyAdapter(noinline init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder
+        = registerNullableTypeHierarchyAdapterBuilder(T::class.java, init)
