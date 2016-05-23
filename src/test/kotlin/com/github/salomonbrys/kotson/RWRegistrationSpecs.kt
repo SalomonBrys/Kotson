@@ -24,7 +24,7 @@ class RWRegistrationSpecs : Spek({
 
         on("serialization") {
 
-            it("Should serialize accordingly") {
+            it("should serialize accordingly") {
                 val json = gson.toJsonTree(Person("Salomon", 29))
 
                 assertTrue(json is JsonArray)
@@ -35,7 +35,7 @@ class RWRegistrationSpecs : Spek({
 
         on("deserialization") {
 
-            it("Should deserialize accordingly") {
+            it("should deserialize accordingly") {
                 val person = gson.fromJson<Person>("[\"Salomon\", 29]")
 
                 assertEquals(Person("Salomon", 29), person)
@@ -54,14 +54,14 @@ class RWRegistrationSpecs : Spek({
 
         on("serializattion") {
 
-            it("Should serialize specific type accordingly") {
+            it("should serialize specific type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", 29))
                 assertTrue(json is JsonArray)
                 assertEquals("Salomon", json[0].string)
                 assertEquals(29, json[1].int)
             }
 
-            it("Should not serialize differently parameterized type accordingly") {
+            it("should not serialize differently parameterized type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", "Brys"))
                 assertTrue(json is JsonObject)
             }
@@ -70,13 +70,13 @@ class RWRegistrationSpecs : Spek({
 
         on("deserialization") {
 
-            it("Should deserialize specific type accordingly") {
+            it("should deserialize specific type accordingly") {
                 val person = gson.fromJson<GenericPerson<Int>>("[\"Salomon\", 29]")
 
                 assertEquals(GenericPerson("Salomon", 29), person)
             }
 
-            it("Should not deserialize differently parameterized type accordingly") {
+            it("should not deserialize differently parameterized type accordingly") {
                 assertFailsWith<JsonSyntaxException> { gson.fromJson<GenericPerson<String>>("[\"Salomon\", \"Brys\"]") }
             }
         }

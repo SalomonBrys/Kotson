@@ -22,7 +22,7 @@ class SDRegistrationSpecs : Spek({
 
         on("serialization") {
 
-            it("Should serialize accordingly") {
+            it("should serialize accordingly") {
                 val json = gson.toJsonTree(Person("Salomon", 29))
 
                 assertTrue(json is JsonArray)
@@ -33,7 +33,7 @@ class SDRegistrationSpecs : Spek({
 
         on("deserialization") {
 
-            it("Should deserialize accordingly") {
+            it("should deserialize accordingly") {
                 val person = gson.fromJson<Person>("[\"Salomon\", 29]")
 
                 assertEquals(Person("Salomon", 29), person)
@@ -51,14 +51,14 @@ class SDRegistrationSpecs : Spek({
 
         on("serializattion") {
 
-            it("Should serialize specific type accordingly") {
+            it("should serialize specific type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", 29))
                 assertTrue(json is JsonArray)
                 assertEquals("Salomon", json[0].string)
                 assertEquals(29, json[1].int)
             }
 
-            it("Should not serialize differently parameterized type accordingly") {
+            it("should not serialize differently parameterized type accordingly") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", "Brys"))
                 assertTrue(json is JsonObject)
             }
@@ -67,7 +67,7 @@ class SDRegistrationSpecs : Spek({
 
         on("deserialization") {
 
-            it("Should deserialize specific type accordingly") {
+            it("should deserialize specific type accordingly") {
                 val person = gson.fromJson<GenericPerson<Int>>("[\"Salomon\", 29]")
 
                 assertEquals(GenericPerson("Salomon", 29), person)
@@ -92,14 +92,14 @@ class SDRegistrationSpecs : Spek({
 
         on("serialization") {
 
-            it("Should serialize any parameterized type accordingly (1)") {
+            it("should serialize any parameterized type accordingly (1)") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", 29))
                 assertTrue(json is JsonArray)
                 assertEquals("Salomon", json[0].string)
                 assertEquals(29, json[1].int)
             }
 
-            it("Should serialize any parameterized type accordingly (2)") {
+            it("should serialize any parameterized type accordingly (2)") {
                 val json = gson.typedToJsonTree(GenericPerson("Salomon", "Brys"))
                 assertTrue(json is JsonArray)
                 assertEquals("Salomon", json[0].string)
@@ -109,13 +109,13 @@ class SDRegistrationSpecs : Spek({
 
         on("deserialization") {
 
-            it("Should deserialize any parameterized type accordingly (1)") {
+            it("should deserialize any parameterized type accordingly (1)") {
                 val person = gson.fromJson<GenericPerson<Int>>("[\"Salomon\", 29]")
 
                 assertEquals(GenericPerson("Salomon", 29), person)
             }
 
-            it("Should deserialize any parameterized type accordingly (2)") {
+            it("should deserialize any parameterized type accordingly (2)") {
                 val person = gson.fromJson<GenericPerson<String>>("[\"Salomon\", \"Brys\"]")
 
                 assertEquals(GenericPerson("Salomon", "Brys"), person)
