@@ -1,9 +1,11 @@
-[![Kotlin 1.0](https://img.shields.io/badge/Kotlin-1.0.2-blue.svg)](http://kotlinlang.org)
+[![Kotlin 1.0.2](https://img.shields.io/badge/Kotlin-1.0.2-blue.svg)](http://kotlinlang.org)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
 [![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
 [![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
 [![GitHub issues](https://img.shields.io/github/issues/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/issues)
 [![Slack channel](https://img.shields.io/badge/Chat-Slack-green.svg)](https://kotlinlang.slack.com/messages/kotson/)
+[![Donate](https://img.shields.io/badge/Backing-Donate-orange.svg)](https://donorbox.org/donation-salomonbrys/)
+
 
 
 Kotson: *Gson* for *Kotlin*
@@ -12,6 +14,7 @@ Kotson: *Gson* for *Kotlin*
 Kotson enables you to parse and write JSON with [Google's Gson](https://github.com/google-gson/google-gson) using a conciser and easier syntax.
 
 Kotson is a set of *extension functions*, meaning that it adds utility functions and syntactic sugars to Gson in Kotlin. It does not add new features to Gson nor does it creates new types. It is therefore usable on any Gson object, whether created from java or kotlin in source or library.
+
 
 
 Install
@@ -28,6 +31,30 @@ Maven:
 Gradle:
 
     compile 'com.github.salomonbrys.kotson:kotson:2.2.1'
+
+
+Table Of Contents
+-----------------
+
+  * [Kotson: <em>Gson</em> for <em>Kotlin</em> ](#kotson-gson-for-kotlin)
+    * [Install](#install)
+    * [Table Of Contents](#table-of-contents)
+  * [Usage](#usage)
+    * [Creating Json](#creating-json)
+    * [Setting custom (de)serializers](#setting-custom-deserializers)
+    * [Setting custom Readers and Writers](#setting-custom-readers-and-writers)
+    * [Parsing JSON](#parsing-json)
+    * [Browsing Json Elements](#browsing-json-elements)
+    * [Mutating Json Elements](#mutating-json-elements)
+    * [Copying Json Elements](#copying-json-elements)
+    * [Accessing object fields via property delegates](#accessing-object-fields-via-property-delegates)
+  * [Let's talk!](#lets-talk)
+  * [Donate](#donate)
+
+
+
+Usage
+=====
 
 
 Creating Json
@@ -131,12 +158,13 @@ Kotson allows you to create those type adapters in different files using the fun
 You will then be able to register those when creating the Gson object:
 
 ```kotlin
-TypeAdapters.kt:
+//TypeAdapters.kt
 import com.github.salomonbrys.kotson.*
 
 val personSerializer = jsonSerializer { /* Same arguments as before */ }
-
-Main.kt:
+```
+```kotlin
+//Main.kt
 import com.github.salomonbrys.kotson.*
 
 val gson = GsonBuilder().registerTypeAdapter<Person>(personSerializer).create()
@@ -190,15 +218,16 @@ Kotson allows you to create those type adapters in different files using the fun
 You will then be able to register those when creating the Gson object:
 
 ```kotlin
-TypeAdapters.kt:
+//TypeAdapters.kt
 import com.github.salomonbrys.kotson.*
 
 val personTypeAdapter = typeAdapter<Person> {
     write { /*...*/ }
     read { /*...*/ }
 }
-
-Main.kt:
+```
+```kotlin
+//Main.kt
 import com.github.salomonbrys.kotson.*
 
 val gson = GsonBuilder().registerTypeAdapter<Person>(personSerializer).create()
@@ -286,15 +315,17 @@ Kotson allows you to mutate a `JsonObject` or a `JsonArray`:
 ```kotlin
 import com.github.salomonbrys.kotson.*
 
-val array = jsonArray("zero", "x", "two")
-array[1] = "one"
-array += "three"
-array -= "zero"
+fun test() {
+    val array = jsonArray("zero", "x", "two")
+    array[1] = "one"
+    array += "three"
+    array -= "zero"
 
-val obj = jsonObject()
-obj["this"] = "that"
-obj += "answer" to 42
-obj -= "this"
+    val obj = jsonObject()
+    obj["this"] = "that"
+    obj += "answer" to 42
+    obj -= "this"
+}
 ```
 
 
@@ -327,22 +358,20 @@ class Person(public val obj: JsonObject) {
 ```
 
 
-Version 1
-=========
 
-Version one only differs in the declaration of type adapters:
+Let's talk!
+===========
 
-```kotlin
-gsonBuilder.serialize<MyType> { src, type, context -> /* return a JsonElement */ }
-gsonBuilder.serializeHierarchy<MyType> { src, type, context -> /* return a JsonElement */ }
-gsonBuilder.simpleSerialize<MyType> { src -> /* return a JsonElement */ }
-gsonBuilder.simpleSerializeHierarchy<MyType> { src -> /* return a JsonElement */ }
+You've read so far ?! You're awsome!
+Why don't you drop by the [Kotson Slack channel](https://kotlinlang.slack.com/messages/kotson/) on Kotlin's Slack group?
 
-gsonBuilder.deserialize<MyType> { json, type, context -> /* return a MyType */ }
-gsonBuilder.deserializeHierarchy<MyType> { json, type, context -> /* return a MyType */ }
-gsonBuilder.simpleDeserialize<MyType> { json -> /* return a MyType */ }
-gsonBuilder.simpleDeserializeHierarchy<MyType> { json -> /* return a MyType */ }
 
-gsonBuilder.createInstances<MyType> { type -> /* return a new MyType */ }
-gsonBuilder.createHierarchyInstances<MyType> { type -> /* return a new MyType */ }
-```
+
+Donate
+======
+
+Kotson is free to use for both non-profit and commercial use and always will be.
+
+If you wish to show some support or appreciation to my work, you are free to **[donate](https://donorbox.org/donation-salomonbrys)**!
+
+This would be (of course) greatly appreciated but is by no means necessary to receive help or support, which I'll be happy to provide for free :)
