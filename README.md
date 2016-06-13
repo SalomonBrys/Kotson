@@ -25,12 +25,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>2.2.1</version>
+    	<version>2.2.2</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:2.2.1'
+    compile 'com.github.salomonbrys.kotson:kotson:2.2.2'
 
 
 Table Of Contents

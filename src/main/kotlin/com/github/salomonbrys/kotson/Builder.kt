@@ -25,20 +25,34 @@ internal fun Any?.toJsonElement(): JsonElement {
     }
 }
 
-fun jsonArray(vararg values: Any?): JsonArray {
+private fun _jsonArray(values: Iterator<Any?>): JsonArray {
     val array = JsonArray()
     for (value in values)
         array.add(value.toJsonElement())
     return array;
 }
 
-fun jsonObject(vararg values: Pair<String, Any?>): JsonObject {
+fun jsonArray(vararg values: Any?) = _jsonArray(values.iterator())
+fun jsonArray(values: Iterable<*>) = _jsonArray(values.iterator())
+fun jsonArray(values: Sequence<*>) = _jsonArray(values.iterator())
+
+fun Iterable<*>.toJsonArray() = jsonArray(this)
+fun Sequence<*>.toJsonArray() = jsonArray(this)
+
+private fun _jsonObject(values: Iterator<Pair<String, *>>): JsonObject {
     val obj = JsonObject()
     for ((key, value) in values) {
         obj.add(key, value.toJsonElement())
     }
     return obj;
 }
+
+fun jsonObject(vararg values: Pair<String, *>) = _jsonObject(values.iterator())
+fun jsonObject(values: Iterable<Pair<String, *>>) = _jsonObject(values.iterator())
+fun jsonObject(values: Sequence<Pair<String, *>>) = _jsonObject(values.iterator())
+
+fun Iterable<Pair<String, *>>.toJsonObject() = jsonObject(this)
+fun Sequence<Pair<String, *>>.toJsonObject() = jsonObject(this)
 
 fun JsonObject.shallowCopy(): JsonObject = JsonObject().apply { this@shallowCopy.entrySet().forEach { put(it) } }
 fun JsonArray.shallowCopy(): JsonArray = JsonArray().apply { addAll(this@shallowCopy) }

@@ -1,4 +1,9 @@
 
+#### 2.2.2 (13-06-2016)
+
+ * `jsonArray` and `jsonObject` functions are now usable with `Iterable` and `Sequence`.
+ * Gradle `2.13`
+
 #### 2.2.1 (23-05-2016)
 
  * Kotlin `1.0.2`.
