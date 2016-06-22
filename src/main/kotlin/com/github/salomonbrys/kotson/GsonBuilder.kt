@@ -31,9 +31,8 @@ data class SerializerArg<T>(
         val type: Type,
         val context: SerializerArg.Context
 ) {
-    class Context(val gsonContext: JsonSerializationContext) {
-        inline fun <reified T: Any> serialize(src: T) = gsonContext.serialize(src, typeToken<T>())
-        fun <T: Any> serialize(src: T, type: Type) = gsonContext.serialize(src, type)
+    class Context(val gsonContext: JsonSerializationContext) : JsonSerializationContext by gsonContext {
+        inline fun <reified T: Any> typedSerialize(src: T) = gsonContext.serialize(src, typeToken<T>())
     }
 }
 
@@ -42,9 +41,8 @@ data class DeserializerArg(
         val type: Type,
         val context: DeserializerArg.Context
 ) {
-    class Context(val gsonContext: JsonDeserializationContext) {
+    class Context(val gsonContext: JsonDeserializationContext) : JsonDeserializationContext by gsonContext {
         inline fun <reified T: Any> deserialize(json: JsonElement) = gsonContext.deserialize<T>(json, typeToken<T>())
-        fun <T: Any> deserialize(json: JsonElement, type: Type) = gsonContext.deserialize<T>(json, type)
     }
 }
 

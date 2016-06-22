@@ -1,4 +1,4 @@
-[![Kotlin 1.0.2](https://img.shields.io/badge/Kotlin-1.0.2-blue.svg)](http://kotlinlang.org)
+[![Kotlin 1.0.2-1](https://img.shields.io/badge/Kotlin-1.0.2--1-blue.svg)](http://kotlinlang.org)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
 [![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
 [![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
@@ -25,12 +25,12 @@ Maven:
     <dependency>
     	<groupId>com.github.salomonbrys.kotson</groupId>
     	<artifactId>kotson</artifactId>
-    	<version>2.2.2</version>
+    	<version>2.3.0</version>
     </dependency>
 
 Gradle:
 
-    compile 'com.github.salomonbrys.kotson:kotson:2.2.2'
+    compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
 
 
 Table Of Contents

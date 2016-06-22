@@ -1,8 +1,15 @@
 
+#### 2.3.0 (22-06-2016)
+
+ * In a `JsonSerializer`, using `it.context.serialize` now serializes according to the object real type (at runtime), which is consistent with `Gson.toJson`.
+   Serializing according to the compile time type is possible with `it.context.typedSerialize`, which is consistent with `Gson.typedToJson`.
+ * Gson `2.7`, see [changelog](https://github.com/google/gson/blob/master/CHANGELOG.md#version-27).
+ * Kotlin `1.0.2-1`
+
 #### 2.2.2 (13-06-2016)
 
  * `jsonArray` and `jsonObject` functions are now usable with `Iterable` and `Sequence`.
- * Gradle `2.13`
+ * Gradle `2.13`.
 
 #### 2.2.1 (23-05-2016)
 
