@@ -16,11 +16,11 @@ internal fun Any?.toJsonElement(): JsonElement {
         return jsonNull
 
     return when (this) {
+        is JsonElement -> this
+        is String -> toJson()
         is Number -> toJson()
         is Char -> toJson()
         is Boolean -> toJson()
-        is String -> toJson()
-        is JsonElement -> this
         else -> throw IllegalArgumentException("${this} cannot be converted to JSON")
     }
 }
@@ -29,7 +29,7 @@ private fun _jsonArray(values: Iterator<Any?>): JsonArray {
     val array = JsonArray()
     for (value in values)
         array.add(value.toJsonElement())
-    return array;
+    return array
 }
 
 fun jsonArray(vararg values: Any?) = _jsonArray(values.iterator())
@@ -44,7 +44,7 @@ private fun _jsonObject(values: Iterator<Pair<String, *>>): JsonObject {
     for ((key, value) in values) {
         obj.add(key, value.toJsonElement())
     }
-    return obj;
+    return obj
 }
 
 fun jsonObject(vararg values: Pair<String, *>) = _jsonObject(values.iterator())

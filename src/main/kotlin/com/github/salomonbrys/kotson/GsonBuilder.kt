@@ -4,6 +4,7 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
+import java.lang.reflect.GenericArrayType
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.lang.reflect.WildcardType
@@ -11,17 +12,51 @@ import java.lang.reflect.WildcardType
 
 inline fun <reified T: Any> gsonTypeToken(): Type  = object : TypeToken<T>() {} .type
 
+private val Type.erasedType: Class<*> get() = when (this) {
+    is Class<*> -> this
+    is ParameterizedType -> this.rawType.erasedType
+    is GenericArrayType -> this.genericComponentType.erasedType
+    else -> throw IllegalStateException("Cannot find erased class of $this")
+}
+
+fun ParameterizedType.isWildcard() : Boolean {
+    var hasAnyWildCard = false
+    var hasBaseWildCard = false
+    var hasSpecific = false
+
+    val cls = this.rawType as Class<*>
+    cls.typeParameters.forEachIndexed { i, variable ->
+        val argument = actualTypeArguments[i]
+
+        if (argument is WildcardType) {
+            val hit = variable.bounds.firstOrNull { it in argument.upperBounds }
+            if (hit != null) {
+                if (hit == Any::class.java || hit.erasedType.isInterface)
+                    hasAnyWildCard = true
+                else
+                    hasBaseWildCard = true
+            }
+            else
+                hasSpecific = true
+        }
+        else
+            hasSpecific = true
+
+    }
+
+    if (hasAnyWildCard && hasSpecific)
+        throw IllegalArgumentException("Either none or all type parameters can be wildcard in $this")
+
+    return hasAnyWildCard || (hasBaseWildCard && !hasSpecific)
+}
+
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 inline fun <reified T: Any> typeToken(): Type {
     val type = gsonTypeToken<T>()
 
-    if (type is ParameterizedType) {
-        if (type.actualTypeArguments.any { it is WildcardType && Object::class.java in it.upperBounds }) {
-            if (!type.actualTypeArguments.all { it is WildcardType })
-                throw IllegalArgumentException("Either none or all type parameters can be wildcard in $type")
-            return type.rawType
-        }
-    }
+    if (type is ParameterizedType && type.isWildcard())
+        return type.rawType
+
     return type
 }
 
@@ -45,11 +80,6 @@ data class DeserializerArg(
         inline fun <reified T: Any> deserialize(json: JsonElement) = gsonContext.deserialize<T>(json, typeToken<T>())
     }
 }
-
-data class TypeAdapterFactoryArg<T>(
-        val gson: Gson,
-        val type: TypeToken<T>
-)
 
 fun <T: Any> jsonSerializer(serializer: (arg: SerializerArg<T>) -> JsonElement): JsonSerializer<T>
         = JsonSerializer { src, type, context -> serializer(SerializerArg(src, type, SerializerArg.Context(context))) }
@@ -111,17 +141,17 @@ interface RegistrationBuilder<T: Any, R : T?> : TypeAdapterBuilder<T, R> {
 }
 
 
-internal class RegistrationBuilderImpl<T: Any, R : T?>(
-        init: RegistrationBuilder<T, R>.() -> Unit,
-        private val _typeAdapterFactory: (TypeAdapterBuilder<T, R>.() -> Unit) -> TypeAdapter<T>,
+internal class RegistrationBuilderImpl<T: Any>(
+        init: RegistrationBuilder<T, T>.() -> Unit,
+//        private val _typeAdapterFactory: (TypeAdapterBuilder<T, T>.() -> Unit) -> TypeAdapter<T>,
         protected val register: (typeAdapter: Any) -> Unit
-) : RegistrationBuilder<T, R> {
+) : RegistrationBuilder<T, T> {
 
     protected enum class _API { SD, RW }
 
     private var _api: _API? = null
 
-    private var _readFunction: (JsonReader.() -> R)? = null
+    private var _readFunction: (JsonReader.() -> T)? = null
     private var _writeFunction: (JsonWriter.(value: T) -> Unit)? = null
 
     private fun _checkApi(api: _API) {
@@ -148,12 +178,12 @@ internal class RegistrationBuilderImpl<T: Any, R : T?>(
         val writeFunction = _writeFunction
         if (readFunction == null || writeFunction == null)
             return
-        register(_typeAdapterFactory { read(readFunction) ; write(writeFunction) })
+        register(typeAdapter<T> { read(readFunction) ; write(writeFunction) })
         _readFunction = null
         _writeFunction = null
     }
 
-    override fun read(function: JsonReader.() -> R) {
+    override fun read(function: JsonReader.() -> T) {
         _readFunction = function
         _registerTypeAdapter()
     }
@@ -174,12 +204,13 @@ internal class RegistrationBuilderImpl<T: Any, R : T?>(
 
 
 fun <T: Any> GsonBuilder.registerTypeAdapterBuilder(type: Type, init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
-    RegistrationBuilderImpl(init, { typeAdapter(it) }, { registerTypeAdapter(type, it) })
+    RegistrationBuilderImpl(init) { registerTypeAdapter(type, it) }
     return this
 }
 
 inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(noinline init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder
         = registerTypeAdapterBuilder(typeToken<T>(), init)
+
 
 fun <T: Any> GsonBuilder.registerNullableTypeAdapterBuilder(type: Type, init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder {
     registerTypeAdapter(type, nullableTypeAdapter(init))
@@ -189,13 +220,15 @@ fun <T: Any> GsonBuilder.registerNullableTypeAdapterBuilder(type: Type, init: Ty
 inline fun <reified T: Any> GsonBuilder.registerNullableTypeAdapter(noinline init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder
         = registerNullableTypeAdapterBuilder(typeToken<T>(), init)
 
+
 fun <T: Any> GsonBuilder.registerTypeHierarchyAdapterBuilder(type: Class<T>, init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
-    RegistrationBuilderImpl(init, { typeAdapter(it) }, { registerTypeHierarchyAdapter(type, it) })
+    RegistrationBuilderImpl(init) { registerTypeHierarchyAdapter(type, it) }
     return this
 }
 
 inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(noinline init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder
         = registerTypeHierarchyAdapterBuilder(T::class.java, init)
+
 
 fun <T: Any> GsonBuilder.registerNullableTypeHierarchyAdapterBuilder(type: Class<T>, init: TypeAdapterBuilder<T, T?>.() -> Unit): GsonBuilder {
     registerTypeHierarchyAdapter(type, nullableTypeAdapter(init))
