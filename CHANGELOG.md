@@ -1,4 +1,12 @@
 
+#### 2.4.0 (10-08-2016)
+
+ * `typeToken` is more permissive with generic parameters. It tries to infer generic wildcards.
+ * Kotlin `1.0.3`
+ * Gradle `2.14.1`.
+ * Spek `1.0.25`.
+
+
 #### 2.3.0 (22-06-2016)
 
  * In a `JsonSerializer`, using `it.context.serialize` now serializes according to the object real type (at runtime), which is consistent with `Gson.toJson`.

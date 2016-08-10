@@ -4,20 +4,12 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import java.lang.reflect.GenericArrayType
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.lang.reflect.WildcardType
 
 
 inline fun <reified T: Any> gsonTypeToken(): Type  = object : TypeToken<T>() {} .type
-
-private val Type.erasedType: Class<*> get() = when (this) {
-    is Class<*> -> this
-    is ParameterizedType -> this.rawType.erasedType
-    is GenericArrayType -> this.genericComponentType.erasedType
-    else -> throw IllegalStateException("Cannot find erased class of $this")
-}
 
 fun ParameterizedType.isWildcard() : Boolean {
     var hasAnyWildCard = false
@@ -31,7 +23,7 @@ fun ParameterizedType.isWildcard() : Boolean {
         if (argument is WildcardType) {
             val hit = variable.bounds.firstOrNull { it in argument.upperBounds }
             if (hit != null) {
-                if (hit == Any::class.java || hit.erasedType.isInterface)
+                if (hit == Any::class.java)
                     hasAnyWildCard = true
                 else
                     hasBaseWildCard = true
@@ -142,8 +134,8 @@ interface RegistrationBuilder<T: Any, R : T?> : TypeAdapterBuilder<T, R> {
 
 
 internal class RegistrationBuilderImpl<T: Any>(
+        val registeredType: Type,
         init: RegistrationBuilder<T, T>.() -> Unit,
-//        private val _typeAdapterFactory: (TypeAdapterBuilder<T, T>.() -> Unit) -> TypeAdapter<T>,
         protected val register: (typeAdapter: Any) -> Unit
 ) : RegistrationBuilder<T, T> {
 
@@ -204,7 +196,7 @@ internal class RegistrationBuilderImpl<T: Any>(
 
 
 fun <T: Any> GsonBuilder.registerTypeAdapterBuilder(type: Type, init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
-    RegistrationBuilderImpl(init) { registerTypeAdapter(type, it) }
+    RegistrationBuilderImpl(type, init) { registerTypeAdapter(type, it) }
     return this
 }
 
@@ -222,7 +214,7 @@ inline fun <reified T: Any> GsonBuilder.registerNullableTypeAdapter(noinline ini
 
 
 fun <T: Any> GsonBuilder.registerTypeHierarchyAdapterBuilder(type: Class<T>, init: RegistrationBuilder<T, T>.() -> Unit): GsonBuilder {
-    RegistrationBuilderImpl(init) { registerTypeHierarchyAdapter(type, it) }
+    RegistrationBuilderImpl(type, init) { registerTypeHierarchyAdapter(type, it) }
     return this
 }
 

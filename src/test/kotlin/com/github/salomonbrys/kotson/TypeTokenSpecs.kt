@@ -47,12 +47,12 @@ class TypeTokenSpecs : Spek ({
         }
 
         on("semi specialized typeToken") {
-            it("should throw an exception T-*") {
+            it("T-*: should throw an exception") {
                 assertFailsWith<IllegalArgumentException> {
                     typeToken<Map<String, *>>()
                 }
             }
-            it("should throw an exception *-T") {
+            it("*-T: should throw an exception") {
                 assertFailsWith<IllegalArgumentException> {
                     typeToken<Map<*, String>>()
                 }
@@ -114,12 +114,10 @@ class TypeTokenSpecs : Spek ({
         }
 
         on("semi specialized typeToken") {
-            it("should throw an exception T-*") {
-                assertFailsWith<IllegalArgumentException> {
-                    typeToken<AnyBaseTuple<String, *>>()
-                }
+            it("T-*: should give a ParameterizedType") {
+                assertTrue(typeToken<AnyBaseTuple<String, *>>() is ParameterizedType)
             }
-            it("should throw an exception *-T") {
+            it("*-T: should throw an exception") {
                 assertFailsWith<IllegalArgumentException> {
                     typeToken<AnyBaseTuple<*, Value>>()
                 }
@@ -143,13 +141,11 @@ class TypeTokenSpecs : Spek ({
         }
 
         on("semi specialized typeToken") {
-            it("should throw an exception") {
-                assertFailsWith<IllegalArgumentException> {
-                    typeToken<BaseBaseTuple<Value, *>>()
-                }
-                assertFailsWith<IllegalArgumentException> {
-                    typeToken<BaseBaseTuple<*, Value>>()
-                }
+            it("T-*: should give a ParameterizedType") {
+                assertTrue(typeToken<BaseBaseTuple<Value, *>>() is ParameterizedType)
+            }
+            it("*-T: should give a ParameterizedType") {
+                assertTrue(typeToken<BaseBaseTuple<*, Value>>() is ParameterizedType)
             }
         }
 
@@ -170,13 +166,11 @@ class TypeTokenSpecs : Spek ({
         }
 
         on("semi specialized typeToken") {
-            it("should give a ParameterizedType T-*") {
+            it("T-*: should give a ParameterizedType") {
                 assertTrue(typeToken<BaseValueTuple<SubValue, *>>() is ParameterizedType)
             }
-            it("should throw an exception *-T") {
-                assertFailsWith<IllegalArgumentException> {
-                    typeToken<BaseValueTuple<*, SubValue>>()
-                }
+            it("*-T: should give a ParameterizedType") {
+                assertTrue(typeToken<BaseValueTuple<*, SubValue>>() is ParameterizedType)
             }
         }
 
@@ -197,10 +191,10 @@ class TypeTokenSpecs : Spek ({
         }
 
         on("semi specialized typeToken") {
-            it("should give a ParameterizedType T-*") {
+            it("T-*: should give a ParameterizedType") {
                 assertTrue(typeToken<ValueValueTuple<SubValue, *>>() is ParameterizedType)
             }
-            it("should give a ParameterizedType *-T") {
+            it("*-T: should give a ParameterizedType") {
                 assertTrue(typeToken<ValueValueTuple<*, SubValue>>() is ParameterizedType)
             }
         }
