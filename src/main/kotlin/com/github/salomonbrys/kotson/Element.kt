@@ -68,4 +68,13 @@ fun JsonObject.keys(): Collection<String> = entrySet().map { it.key }
 fun JsonObject.forEach(operation: (String, JsonElement) -> Unit): Unit = entrySet().forEach { operation(it.key, it.value) }
 fun JsonObject.toMap(): Map<String, JsonElement> = entrySet().associateBy({ it.key }, { it.value })
 
+fun JsonObject.addProperty(property: String, value: JsonElement?) = add(property, value)
+fun JsonObject.addProperty(property: String, value: Any?, context: JsonSerializationContext) = add(property, context.serialize(value))
+fun JsonObject.addPropertyIfNotNull(property: String, value: String?) = value?.let { addProperty(property, value) }
+fun JsonObject.addPropertyIfNotNull(property: String, value: Char?) = value?.let { addProperty(property, value) }
+fun JsonObject.addPropertyIfNotNull(property: String, value: Boolean?) = value?.let { addProperty(property, value) }
+fun JsonObject.addPropertyIfNotNull(property: String, value: Number?) = value?.let { addProperty(property, value) }
+fun JsonObject.addPropertyIfNotNull(property: String, value: JsonElement?) = value?.let { addProperty(property, value) }
+fun JsonObject.addPropertyIfNotNull(property: String, value: Any?, context: JsonSerializationContext) = value?.let { addProperty(property, value, context) }
+
 operator fun JsonArray.contains(value: Any): Boolean = contains(value.toJsonElement())
