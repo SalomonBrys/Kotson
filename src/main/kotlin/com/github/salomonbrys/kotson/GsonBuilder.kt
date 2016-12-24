@@ -179,7 +179,7 @@ internal class RegistrationBuilderImpl<T: Any>(
 
     override fun read(function: JsonReader.() -> T) {
         _readFunction = function
-        _registerTypeAdapter() 
+        _registerTypeAdapter()
     }
 
     override fun write(function: JsonWriter.(value: T) -> Unit) {
