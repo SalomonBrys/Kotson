@@ -12,3 +12,4 @@
 /build/
 gradle.properties
 local.properties
+.gradletasknamecache

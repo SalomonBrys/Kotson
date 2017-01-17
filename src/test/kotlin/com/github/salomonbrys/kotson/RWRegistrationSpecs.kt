@@ -85,8 +85,8 @@ class RWRegistrationSpecs : Spek({
     given ("a bad type adapter") {
         on("definition of both serialize and read") {
             it("should throw an exception") {
-                val e = assertFailsWith<IllegalArgumentException> {
-                    val gson = GsonBuilder()
+                assertFailsWith<IllegalArgumentException> {
+                    GsonBuilder()
                             .registerTypeAdapter<Person> {
                                 serialize { jsonArray(it.src.name, it.src.age) }
                                 read { beginArray() ; val p = Person(nextString(), nextInt()) ; endArray() ; p }
@@ -99,7 +99,7 @@ class RWRegistrationSpecs : Spek({
         on("definition of only write") {
             it("should throw an exception") {
                 assertFailsWith<IllegalArgumentException> {
-                    val gson = GsonBuilder()
+                    GsonBuilder()
                             .registerTypeAdapter<Person> {
                                 write { beginArray().value(it.name).value(it.age).endArray() }
                             }

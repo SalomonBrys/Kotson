@@ -1,4 +1,16 @@
 
+#### 2.5.0 (17-01-2017)
+
+ * `typeToken` removes generic type parameter wildcards. This means that `typeToken<List<Something>>` will now return `List<Something>` instead of `List<? extends Something>`.
+ * Added the `byNullable*` functions to delegate to nullable values inside a `JsonObject` or `JsonArray` (thanks to @eygraber Eliezer Graber).
+ * Added the possibility to define a default value to the delegate `by*` methods (thanks to @eygraber Eliezer Graber).
+ * Added the `addProperty` and `addPropertyIfNotNull` methods to `JsonObject` (thanks to @ColinHebert Colin Hebert).
+ * Added the ability to add a `JsonSerializer` and `JsonDeserializer` with `registerTypeAdapter` (thanks to @ColinHebert Colin Hebert).
+ * Gson `2.8.0`, see [changelog](https://github.com/google/gson/blob/master/CHANGELOG.md#version-28).
+ * Kotlin `1.0.6`
+ * Gradle `3.3`
+
+
 #### 2.4.0 (10-08-2016)
 
  * `typeToken` is more permissive with generic parameters. It tries to infer generic wildcards.
