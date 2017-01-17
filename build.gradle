@@ -50,7 +50,7 @@ repositories {
 }
 
 dependencies {
-    compile "com.google.code.gson:gson:2.7"
+    compile "com.google.code.gson:gson:2.8.0"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

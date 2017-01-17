@@ -9,6 +9,7 @@ import java.lang.reflect.Type
 import java.lang.reflect.WildcardType
 
 
+@Suppress("PROTECTED_CALL_FROM_PUBLIC_INLINE")
 inline fun <reified T: Any> gsonTypeToken(): Type  = object : TypeToken<T>() {} .type
 
 fun ParameterizedType.isWildcard() : Boolean {
@@ -42,6 +43,19 @@ fun ParameterizedType.isWildcard() : Boolean {
     return hasAnyWildCard || (hasBaseWildCard && !hasSpecific)
 }
 
+fun removeTypeWildcards(type: Type): Type {
+
+    if (type is ParameterizedType) {
+        val arguments = type.actualTypeArguments
+            .map { if (it is WildcardType) it.upperBounds[0] else it }
+            .map { removeTypeWildcards(it) }
+            .toTypedArray()
+        return TypeToken.getParameterized(type.rawType, *arguments).type
+    }
+
+    return type
+}
+
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 inline fun <reified T: Any> typeToken(): Type {
     val type = gsonTypeToken<T>()
@@ -49,7 +63,7 @@ inline fun <reified T: Any> typeToken(): Type {
     if (type is ParameterizedType && type.isWildcard())
         return type.rawType
 
-    return type
+    return removeTypeWildcards(type)
 }
 
 
