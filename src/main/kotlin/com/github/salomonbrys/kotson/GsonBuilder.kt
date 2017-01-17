@@ -131,10 +131,12 @@ internal class TypeAdapterBuilderImpl<T: Any, R: T?>(
 fun <T: Any> typeAdapter(init: TypeAdapterBuilder<T, T>.() -> Unit): TypeAdapter<T> = TypeAdapterBuilderImpl(init).build()
 fun <T: Any> nullableTypeAdapter(init: TypeAdapterBuilder<T, T?>.() -> Unit): TypeAdapter<T> = TypeAdapterBuilderImpl<T, T?>(init).build().nullSafe()
 
-
-
 inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(typeAdapter: Any): GsonBuilder
         = this.registerTypeAdapter(typeToken<T>(), typeAdapter)
+inline fun <reified T : Any> GsonBuilder.registerTypeAdapter(serializer: JsonSerializer<T>): GsonBuilder
+        = this.registerTypeAdapter<T>(serializer as Any)
+inline fun <reified T : Any> GsonBuilder.registerTypeAdapter(deserializer: JsonDeserializer<T>): GsonBuilder
+        = this.registerTypeAdapter<T>(deserializer as Any)
 
 inline fun <reified T: Any> GsonBuilder.registerTypeHierarchyAdapter(typeAdapter: Any): GsonBuilder
         = this.registerTypeHierarchyAdapter(T::class.java, typeAdapter)
