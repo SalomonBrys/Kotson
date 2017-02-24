@@ -272,7 +272,7 @@ Kotson allows you to simply convert a jsonElement to a primitive, a `JsonObject`
 import com.github.salomonbrys.kotson.*
 
 val s = json.string // java: String s = json.getAsString();
-val i = json.int    // java: int i = json.getAsBoolean();
+val i = json.int    // java: int i = json.getAsInt();
 val a = json.array  // java: JsonArray = json.getAsJsonArray();
 val o = json.obj    // java: JsonObject = json.getAsJsonObject();
 
