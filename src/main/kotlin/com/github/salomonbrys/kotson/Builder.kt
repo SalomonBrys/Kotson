@@ -21,6 +21,7 @@ internal fun Any?.toJsonElement(): JsonElement {
         is Number -> toJson()
         is Char -> toJson()
         is Boolean -> toJson()
+        is Unit -> jsonNull
         else -> throw IllegalArgumentException("${this} cannot be converted to JSON")
     }
 }
