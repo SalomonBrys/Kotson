@@ -2,6 +2,9 @@ package com.github.salomonbrys.kotson
 
 import com.google.gson.Gson
 import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
 import java.lang.reflect.ParameterizedType
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

@@ -3,6 +3,9 @@ package com.github.salomonbrys.kotson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
