@@ -1,11 +1,11 @@
-[![Kotlin 1.0.6](https://img.shields.io/badge/Kotlin-1.0.6-blue.svg)](http://kotlinlang.org)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.salomonbrys.kotson/kotson.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.salomonbrys.kotson%22)
-[![Travis](https://img.shields.io/travis/SalomonBrys/Kotson.svg)](https://travis-ci.org/SalomonBrys/Kotson/builds)
-[![MIT License](https://img.shields.io/github/license/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/blob/master/LICENSE.txt)
-[![GitHub issues](https://img.shields.io/github/issues/SalomonBrys/Kotson.svg)](https://github.com/SalomonBrys/Kotson/issues)
-[![Slack channel](https://img.shields.io/badge/Chat-Slack-green.svg)](https://kotlinlang.slack.com/messages/kotson/)
-[![Donate](https://img.shields.io/badge/Backing-Donate-orange.svg)](https://donorbox.org/donation-salomonbrys/)
+= DEPRECATED
 
+This library is deprecated.
+You can still use it. It is not going any where.
+
+However, it is not maintained anymore.
+
+If you are looking for a cool, up-to-date JSON parsing library for Kotlin/JVM: [here you go](https://github.com/square/moshi/)!
 
 
 Kotson: *Gson* for *Kotlin*
