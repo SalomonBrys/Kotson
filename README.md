@@ -1,4 +1,4 @@
-= DEPRECATED
+# DEPRECATED
 
 This library is deprecated.
 You can still use it. It is not going any where.
@@ -8,8 +8,7 @@ However, it is not maintained anymore.
 If you are looking for a cool, up-to-date JSON parsing library for Kotlin/JVM: [here you go](https://github.com/square/moshi/)!
 
 
-Kotson: *Gson* for *Kotlin*
-===========================
+## Kotson: *Gson* for *Kotlin*
 
 Kotson enables you to parse and write JSON with [Google's Gson](https://github.com/google-gson/google-gson) using a conciser and easier syntax.
 
@@ -17,8 +16,7 @@ Kotson is a set of *extension functions*, meaning that it adds utility functions
 
 
 
-Install
--------
+### Install
 
 Maven:
 
@@ -33,8 +31,7 @@ Gradle:
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
 
 
-Table Of Contents
------------------
+### Table Of Contents
 
   * [Kotson: <em>Gson</em> for <em>Kotlin</em> ](#kotson-gson-for-kotlin)
     * [Install](#install)
@@ -53,12 +50,9 @@ Table Of Contents
 
 
 
-Usage
-=====
+## Usage
 
-
-Creating Json
--------------
+### Creating Json
 
 JsonObject:
 
@@ -109,8 +103,7 @@ val os = "coucou".toJson()   // java: new JsonPrimitive("coucou");
 ```
 
 
-Setting custom (de)serializers
-------------------------------
+### Setting custom (de)serializers
 
 If you need to register a `serializer` / `deserializer` / `InstanceCreator`, you can use these "builder" APIs:
 
@@ -171,8 +164,7 @@ val gson = GsonBuilder().registerTypeAdapter<Person>(personSerializer).create()
 ```
 
 
-Setting custom Readers and Writers
-----------------------------------
+### Setting custom Readers and Writers
 
 Gson has another API (named Stream API) that allows to register writers (to `JsonWriter`) and readers (from `JsonReader`).  
 Here is an example for a simple `Person` class:
@@ -237,8 +229,7 @@ Kotson provides no utility function for the `TypeAdapterFactory` interface.
 Because this interface defines a generic function, there is currently no other way to use it other than implementing it on a regular `object` or `class`.
 
 
-Parsing JSON
-------------
+### Parsing JSON
 
 Kotson provides a simple API that does not suffer from Java's type erasure. That means that whatever the output type, it will be parsed correctly and eliminates the need for `TypeToken`.
 
@@ -264,8 +255,7 @@ When providing a non-specialized generic type, `typeToken<List<*>>` will return 
 If you really need a `ParameterizedType` for a non-specialized generic type, you can use the `gsonTypeToken` function.
 
 
-Browsing Json Elements
-----------------------
+### Browsing Json Elements
 
 Kotson allows you to simply convert a jsonElement to a primitive, a `JsonObject` or a `JsonArray`:
 ```kotlin
@@ -307,8 +297,7 @@ val greenComp = json["colors"]["orange"][1].int
 ```
 
 
-Mutating Json Elements
-----------------------
+### Mutating Json Elements
 
 Kotson allows you to mutate a `JsonObject` or a `JsonArray`:
 
@@ -329,8 +318,7 @@ fun test() {
 ```
 
 
-Copying Json Elements
----------------------
+### Copying Json Elements
 
 Kotson allows you to make a shallow copy (single-level copy) or a deep copy (recursive copy) of a `JsonObject` or a `JsonArray`:
 
@@ -342,8 +330,7 @@ val deep = json.deepCopy()
 ```
 
 
-Accessing object fields via property delegates
-----------------------------------------------
+### Accessing object fields via property delegates
 
 Kotson allows you to delegate properties to `JsonObject` fields:
 
@@ -359,19 +346,9 @@ class Person(public val obj: JsonObject) {
 
 
 
-Let's talk!
-===========
+## Let's talk!
 
 You've read so far ?! You're awsome!
 Why don't you drop by the [Kotson Slack channel](https://kotlinlang.slack.com/messages/kotson/) on Kotlin's Slack group?
 
 
-
-Donate
-======
-
-Kotson is free to use for both non-profit and commercial use and always will be.
-
-If you wish to show some support or appreciation to my work, you are free to **[donate](https://donorbox.org/donation-salomonbrys)**!
-
-This would be (of course) greatly appreciated but is by no means necessary to receive help or support, which I'll be happy to provide for free :)
